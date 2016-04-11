@@ -1,0 +1,57 @@
+/*Desktop Responsive*/
+@media
+    only screen and
+    (min-width: 1025px) {
+        .hideable {
+            display: table-cell;
+        }
+        td {
+            font-size:13px;
+        }
+        th {
+            font-size:15px;
+        }
+}
+/*Tablet Responsive*/
+@media
+    only screen and
+    (min-width: 768px) and (max-width: 1024px)  {
+        .hideable {
+            display:table-cell;
+        }
+        td {
+            font-size: 12px;
+        }
+        th {
+            font-size: 14px;
+        }
+        
+}
+/*Mobile Responsive*/
+@media
+    only screen and
+    (max-width: 767px) {
+        .hideable {
+            display:none;
+        }
+        td {
+            font-size:11px;
+            font-size:12px;
+        }
+        th {
+            font-size:12px;
+        }
+}
+
+#userMenu {
+    border: 1px solid black;
+    float:right;
+    margin-bottom:10px;
+    padding:10px;
+}
+#userMenu > ul li {
+    margin-bottom:12px;
+}
+thead {
+    border:1px solid black;
+}
