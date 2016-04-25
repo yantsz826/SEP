@@ -1,3 +1,10 @@
+<%-- 
+    Document   : UserRegistration.jsp
+    Created on : 25/04/2016, 1:50:57 PM
+    Author     : Chen
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!--[if lt IE 9]>
     <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
   <![endif]-->
@@ -31,14 +38,6 @@
                     </tr>
                     <tr>
                         <th>
-                            <label>Email: </label>
-                        </th>
-                        <td>
-                            <input id="" type="text" name="" class="txt" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
                             <label>Password: </label>
                         </th>
                         <td>
@@ -52,15 +51,7 @@
                         <td>
                             <input id="" type="password" name="" class="txt" />
                         </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <label>Phone No: </label>
-                        </th>
-                        <td>
-                            <input id="" type="text" name="" class="txt" /><br />
-                        </td>
-                    </tr>                    
+                    </tr>                  
                     <tr>
                         <td colspan="2">                            
                             <span class="half_box left"><input class="btn" type="submit" value="Cancel" onClick=""></span>
@@ -72,6 +63,3 @@
         </div>
     </body>      
 </html>
-
-
-
