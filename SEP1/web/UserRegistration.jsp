@@ -26,14 +26,17 @@
                     <h1>Register Form</h1>
                 </span>
             </div>
-            <form id="register_form" action="" method="post">
+            
+            <!-- <% String message = (String)(request.getAttribute("message")); %> -->
+            
+            <form id="register_form" action="<%=request.getContextPath()%>/UserRegistServlet" method="post">
                 <table class="register_table">
                     <tr>
                         <th class="r_left">
                             <label>Vendor ID: </label>
                         </th>
                         <td class="r_right">
-                            <input id="" type="text" name="" class="txt" />
+                            <input id="" type="text" name="vendorID" class="txt" />
                         </td>
                     </tr>
                     <tr>
@@ -41,7 +44,7 @@
                             <label>Password: </label>
                         </th>
                         <td>
-                            <input id="" type="password" name="" class="txt" />
+                            <input id="" type="password" name="password" class="txt" />
                         </td>
                     </tr>
                     <tr>
@@ -49,7 +52,8 @@
                             <label>Re-Password: </label>
                         </th>
                         <td>
-                            <input id="" type="password" name="" class="txt" />
+                            <!-- <span style="color:red;font-weight:bold">< % message % ></span> -->
+                            <input id="" type="password" name="re_password" class="txt" />
                         </td>
                     </tr>                  
                     <tr>

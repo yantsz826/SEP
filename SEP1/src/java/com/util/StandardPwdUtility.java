@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pwd;
+package com.util;
 
 import java.util.Random;
 
@@ -11,7 +11,7 @@ import java.util.Random;
  *
  * @author Chen
  */
-public class PwdReset {
+public class StandardPwdUtility {
    //pwd length
     private final int max = 12;
     private final int min = 8;
