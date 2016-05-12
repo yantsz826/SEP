@@ -25,10 +25,10 @@
             <div class="reset_title">
                 </br>
                 </br>         
-                </br>         
-                <% String email_message = (String)(request.getAttribute("email_message")); %>
+                </br>   
+                <% String success_message = (String)(request.getAttribute("success_message")); %>
                 <span style="font-size: 140%">
-                    The new password has been successfully sent to user registered email </br></br>->&nbsp;<%= email_message %></br>
+                    Your account &nbsp;<%= success_message %>&nbsp; has been created successfully
                 </span>                       
         </div>
     </body>      

@@ -37,10 +37,14 @@ public class UserRegistServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
+
         String vendorID = request.getParameter("vendorID");
         String password = request.getParameter("password");
         String re_password = request.getParameter("re_password");
+        String email = request.getParameter("email");
+        
+        String regist_message = "Error: Invalid vendorID, password or email !";
+        String success_message = vendorID;
         
         try {
             cm = new ConnMysqlUtility();
@@ -51,11 +55,14 @@ public class UserRegistServlet extends HttpServlet {
         UserRegister ug = new UserRegister(cm);
         
         try {
-            if(ug.registUser(vendorID, password, re_password) == true){
-                request.getRequestDispatcher("/PwdResetTwo.jsp").forward(request, response);
+            if(ug.registUser(vendorID, password, re_password, email) == true){
+                request.setAttribute("success_message", success_message);
+                request.getRequestDispatcher("/SuccessPage.jsp").forward(request, response);
             }
             else {
-                request.getRequestDispatcher("/ErrorMessagePage.jsp").forward(request, response);
+
+                request.setAttribute("regist_message", regist_message);
+                request.getRequestDispatcher("/UserRegistration.jsp").forward(request, response);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserRegistServlet.class.getName()).log(Level.SEVERE, null, ex);

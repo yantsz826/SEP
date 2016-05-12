@@ -27,7 +27,6 @@ import com.util.ConnMysqlUtility;
 public class PwdForget {       
     private ConnMysqlUtility conn = null;    
     private Statement stmt = null;
-    private PreparedStatement pstmt = null;
     private ResultSet rs = null;
     
     //pwd length
@@ -35,26 +34,26 @@ public class PwdForget {
     private final int min = 8;
     
 
+    
     public PwdForget(ConnMysqlUtility conn) {
         this.conn = conn;
     }
     
-    public boolean identifyUser(String vendorID, String name) throws SQLException {
+    
+    
+    public boolean identifyUser(String vendorID) throws SQLException {
         boolean pass = false;    
         
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select * from user where vendor_id=? and name=?";
-            pstmt = this.conn.getConnection().prepareStatement(sql);
-            pstmt.setString(1, vendorID);
-            pstmt.setString(2, name);
-            
-            rs = pstmt.executeQuery();
+            String sql = "select * from user where vendor_id='" + vendorID + "'";
+          
+            rs = stmt.executeQuery(sql); 
 
             while (rs.next()) {
-               
-                pass = vendorID.equals(rs.getString("vendor_id")) & name.equals(rs.getString("name"));
+                
+                pass = vendorID.equals(rs.getString("vendor_id"));
                 
             }
         } 
@@ -63,12 +62,14 @@ public class PwdForget {
         }
         finally {
             rs.close();
-            pstmt.close();
             stmt.close();
         }
         
         return pass;
     }
+    
+    
+    
     
     public void sendUserEmail(String host, String port, String userName, String password, String toEmail, String subject, String message) throws MessagingException {
                   
@@ -107,13 +108,15 @@ public class PwdForget {
         transport.sendMessage(msg, msg.getAllRecipients());
     }   
     
-    public String getRegisteredEmail(String vendorID, String name) throws SQLException {
+    
+    
+    public String getRegisteredEmail(String vendorID) throws SQLException {
         String email = null;
        
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select email from user where vendor_id='" + vendorID + "' and name='" + name + "'";
+            String sql = "select email from user where vendor_id='" + vendorID + "'";
             rs = stmt.executeQuery(sql);   
             
             //extract data from result set
@@ -132,23 +135,20 @@ public class PwdForget {
         return email;
     }
           
-    //!!!!!ISSUE!!!!   what about two functions work ConnMysqlUtility conn same time ???
     //close ConnMysqlUtility conn here when pwd forget function finish
     //save the user temp password & outDate
-    public boolean saveChangeToDB(String outDate, String vendorID, String name, String password) throws SQLException {
+    public boolean saveChangeToDB(String outDate, String vendorID, String password) throws SQLException {
         boolean pass = false;
-        //
+
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "UPDATE user SET outdate='" + outDate + "' ,password='" + password + "' WHERE vendor_id='" + vendorID + "' AND name='" + name + "'";
+            String sql = "UPDATE user SET outdate='" + outDate + "' ,password='" + password + "' WHERE vendor_id='" + vendorID + "'";
 
-            //System.out.println("SQL-----------!!!!!!!!!!!!!!!!!!!!!-----: " + sql);
             
             if(stmt.executeUpdate(sql) > 0) {
                 pass = true;
             }
-            //System.out.println("->" + pass);
            
         }
         catch (SQLException e) {
@@ -165,6 +165,8 @@ public class PwdForget {
         return pass;  
     }
     
+    
+    
     public String getOutDate(int field, int value) {
         Date date = new Date();
         GregorianCalendar gc = new GregorianCalendar();
@@ -173,13 +175,12 @@ public class PwdForget {
         gc.setTime(date);
         gc.add(field, value);
         gc.set(gc.get(Calendar.YEAR),gc.get(Calendar.MONTH),gc.get(Calendar.DATE));
-        //System.out.println("date -------------------->>>>" + gc.getTime());
         String temp = sf.format(gc.getTime());
-        //System.out.println("temp -------------------->>>>" + temp);
-        //temp = gc.getTime().toString();
         
         return temp;
     }
+ 
+    
     
     //at least 8 characters long, at least one capital letters and two numbers. This is a standard Curtin requirement.
     public String pwdGenerator() {
@@ -207,6 +208,8 @@ public class PwdForget {
         
         return pwd;
     } 
+    
+    
     
     private String getRandomCode(int length) {       
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

@@ -28,6 +28,8 @@ public class PwdForgetServlet extends HttpServlet {
     private ConnMysqlUtility cm = null;
     private final String host = "smtp.gmail.com";
     private final String port = "465";
+    
+    //any mail account -> sender
     private final String username = "seven.albany.bi@gmail.com";
     private final String password = "Seven1206";
     private final String subject = "Temporary Password";
@@ -52,10 +54,9 @@ public class PwdForgetServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String vendorID = request.getParameter("vendorID");
-        String name = request.getParameter("Name");
         
-        //System.out.println(vendorID);
-        //System.out.println(name);
+        //error message to pwd reset page
+        String errorMessage = "Error: Invalid vendor ID !";
 
         try {
             cm = new ConnMysqlUtility();
@@ -65,20 +66,31 @@ public class PwdForgetServlet extends HttpServlet {
         PwdForget pf = new PwdForget(cm);
         
         try {
-            if(pf.identifyUser(vendorID, name) == true) {
+            if(pf.identifyUser(vendorID) == true) {
                 String dateString;   
                 
-                //get outdate； field2
-                dateString = pf.getOutDate(field2, 1);
+                //get outdate； field3 -> week
+                dateString = pf.getOutDate(field3, 1);
 
-                //get temp password
-                String message = pf.pwdGenerator();
+                //email content
+                String pwd = pf.pwdGenerator();
+                
+                String message = "This is your temporary passoword ' " + pwd
+                        + " ' for your account ' " + vendorID + " '.<br>" + "Please"
+                        + " note the temporary password is only avaiable before " + dateString + "." +
+                        "<br><br><br>" + "Best Regards," + "<br><br>" + "Curtin University";
+                
                 
                 //get user email
-                String toEmail = pf.getRegisteredEmail(vendorID, name);
+                String toEmail = pf.getRegisteredEmail(vendorID);
                 
-                if(pf.saveChangeToDB(dateString, vendorID, name, message) == true) {
+                //email message to pwd reset page two
+                String emailMessage = toEmail;
+                
+                
+                if(pf.saveChangeToDB(dateString, vendorID, pwd) == true) {
                     pf.sendUserEmail(host, port, username, password, toEmail, subject, message);
+                    request.setAttribute("email_message", emailMessage);
                     request.getRequestDispatcher("/PwdResetTwo.jsp").forward(request, response);
                 }
                 else {
@@ -86,7 +98,8 @@ public class PwdForgetServlet extends HttpServlet {
                 }
             }
             else {
-                request.getRequestDispatcher("/ErrorMessagePage.jsp").forward(request, response);
+                request.setAttribute("error_message", errorMessage);
+                request.getRequestDispatcher("/PwdResetOne.jsp").forward(request, response);
             }
         } catch (SQLException | MessagingException | ServletException | IOException ex) {
             Logger.getLogger(PwdForgetServlet.class.getName()).log(Level.SEVERE, null, ex);

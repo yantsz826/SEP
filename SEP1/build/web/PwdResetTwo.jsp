@@ -25,9 +25,10 @@
             <div class="reset_title">
                 </br>
                 </br>         
-                </br>                
-                <span style="font-size: 150%">
-                    Temporary password has been sent to user registered email !</br></br>Please go check your email !
+                </br>         
+                <% String email_message = (String)(request.getAttribute("email_message")); %>
+                <span style="font-size: 140%">
+                    The new password has been successfully sent to user registered email </br></br>->&nbsp;<%= email_message %></br>
                 </span>                       
         </div>
     </body>      

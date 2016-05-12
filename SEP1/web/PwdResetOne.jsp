@@ -27,8 +27,13 @@
                 <span>
                     <h1>Reset Password</h1>
                 </span>
-            </div>
+            </div>      
+            <% String error_message = (String)(request.getAttribute("error_message")); %>
+            <% if(error_message == null) {
+                error_message = " ";
+            } %>
             <form id="reset_form" action="<%=request.getContextPath()%>/PwdForgetServlet" method="post">
+                <span style = "color:red; font-size: 13px;"> <%= error_message %> </span>
                 </br>
                 </br>
                 <table class="reset_table">
@@ -37,17 +42,12 @@
                             <label>Vendor ID: </label>
                         </th>
                         <td class="r_right">
-                            <input id="input" type="text" name="vendorID" class="txt" />   
+                            <input id="input" type="text" name="vendorID" class="txt" /> 
                         </td>   
                     </tr>
-                    <tr>
-                        <th>
-                            <label>Name: </label>
-                        </th>
-                        <td>
-                            <input id="input" type="text" name="Name" class="txt" /> <br />
-                        </td>
-                    </tr>
+                    </br>
+                    </br>
+                    </br>
                     <tr>    
                         <td colspan="2">     
                             <span class="half_box left"><input class="btn" type="submit" value="Cancel" onclick=""></span>
@@ -55,7 +55,7 @@
                         </td>
                     </tr>
                 </table>
-            </form>                            
+            </form>                      
         </div>
     </body>      
 </html>
