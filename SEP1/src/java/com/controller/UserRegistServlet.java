@@ -43,7 +43,7 @@ public class UserRegistServlet extends HttpServlet {
         String re_password = request.getParameter("re_password");
         String email = request.getParameter("email");
         
-        String regist_message = "Error: Invalid vendorID, password or email !";
+        String regist_message = "Error: Invalid vendorID or Email !";
         String success_message = vendorID;
         
         try {

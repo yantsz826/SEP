@@ -13,10 +13,11 @@ import java.sql.*;
  */
 public class ConnMysqlUtility {
     
-    private static final String DRIVER = "com.mysql.jdbc.Driver";
+    //mysql for testing
+    private static final String DRIVER = "com.mysql.jdbc.Driver"; 
     private static final String URL = "jdbc:mysql://localhost:3306/samp_db";
     private static final String USER = "root";
-    private static final String PWD = "Seven1206";
+    private static final String PWD = "";
     private Connection conn = null;
     
     public ConnMysqlUtility() throws Exception {

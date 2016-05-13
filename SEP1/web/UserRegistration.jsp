@@ -55,7 +55,7 @@
                 }              
                 
                 if(Bletter < 1 && count < 8 && number < 2) {
-                    alert("password must at least 8 characters long, and at least one capital letters and two numbers");
+                    alert("Note:  Password must at least 8 characters long, and at least one capital letters and two numbers");
                     document.getElementById("b").value = "";
 
                     return false;

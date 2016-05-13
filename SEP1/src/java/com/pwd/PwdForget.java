@@ -103,7 +103,7 @@ public class PwdForget {
 
         Transport transport = session.getTransport("smtp");
 
-        transport.connect("smtp.gmail.com", userName, password);
+        transport.connect("smtp.gmail.com", userName, password);  //gmail
 
         transport.sendMessage(msg, msg.getAllRecipients());
     }   

@@ -26,12 +26,12 @@ import com.util.ConnMysqlUtility;
 public class PwdForgetServlet extends HttpServlet {
     
     private ConnMysqlUtility cm = null;
-    private final String host = "smtp.gmail.com";
-    private final String port = "465";
+    private final String host = "";             //gmail host for testing  "smtp.gmail.com"
+    private final String port = "";            //port for testing   "465"
     
     //any mail account -> sender
-    private final String username = "seven.albany.bi@gmail.com";
-    private final String password = "Seven1206";
+    private final String username = "";   //sender email
+    private final String password = "";   //sender email pwd
     private final String subject = "Temporary Password";
     
     //1->year, 2->month, 3->week, 5->day
