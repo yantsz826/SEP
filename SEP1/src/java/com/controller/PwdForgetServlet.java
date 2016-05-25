@@ -5,6 +5,7 @@
  */
 package com.controller;
 
+import com.pwd.EmailEntry;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.pwd.PwdForget;
-import com.util.ConnMysqlUtility;
+import com.util.ConnOracleUtility;
 
 /**
  *
@@ -25,9 +26,9 @@ import com.util.ConnMysqlUtility;
 @WebServlet(name = "PwdForgetServlet", urlPatterns = {"/PwdForgetServlet"})
 public class PwdForgetServlet extends HttpServlet {
     
-    private ConnMysqlUtility cm = null;
-    private final String host = "";             //gmail host for testing  "smtp.gmail.com"
-    private final String port = "";            //port for testing   "465"
+    private ConnOracleUtility cm = null;
+    private final String host = "smtp.gmail.com";             //gmail host for testing  "smtp.gmail.com"
+    private final String port = "465";            //port for testing   "465", for TLS/STARTTLS 587
     
     //any mail account -> sender
     private final String username = "";   //sender email
@@ -52,14 +53,24 @@ public class PwdForgetServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        /**
+         *  judge if it submitted before, so we need have token at previous page
+         *  create token, and set token like request.getSession().setAttribute("token", token);
+         *  String token = TokenProccessor.getInstance().makeToken();
+         *  
+         */
+        boolean bo = isRepeatSubmit(request);
+        if(bo != true) {
+            request.getSession().removeAttribute("token");
+        }      
 
         String vendorID = request.getParameter("vendorID");
-        
         //error message to pwd reset page
         String errorMessage = "Error: Invalid vendor ID !";
 
         try {
-            cm = new ConnMysqlUtility();
+            cm = new ConnOracleUtility();
         } catch (Exception ex) {
             Logger.getLogger(PwdForgetServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -68,34 +79,30 @@ public class PwdForgetServlet extends HttpServlet {
         try {
             if(pf.identifyUser(vendorID) == true) {
                 String dateString;   
-                
                 //get outdate； field3 -> week
-                dateString = pf.getOutDate(field3, 1);
-
+                dateString = pf.getOutDate(field5, 1);
                 //email content
                 String pwd = pf.pwdGenerator();
-                
                 String message = "This is your temporary passoword ' " + pwd
                         + " ' for your account ' " + vendorID + " '.<br>" + "Please"
                         + " note the temporary password is only avaiable before " + dateString + "." +
                         "<br><br><br>" + "Best Regards," + "<br><br>" + "Curtin University";
-                
-                
                 //get user email
                 String toEmail = pf.getRegisteredEmail(vendorID);
-                
                 //email message to pwd reset page two
                 String emailMessage = toEmail;
                 
-                
-                if(pf.saveChangeToDB(dateString, vendorID, pwd) == true) {
-                    pf.sendUserEmail(host, port, username, password, toEmail, subject, message);
+                if(pf.saveChangeToDB(dateString, vendorID, pwd, new EmailEntry(host, port, username, password, toEmail, subject, message)) == true) {
                     request.setAttribute("email_message", emailMessage);
                     request.getRequestDispatcher("/PwdResetTwo.jsp").forward(request, response);
+                    cm.close();
                 }
                 else {
                     request.getRequestDispatcher("/ErrorMessagePage.jsp").forward(request, response);
+                    cm.close();
                 }
+                
+                cm.close();
             }
             else {
                 request.setAttribute("error_message", errorMessage);
@@ -103,9 +110,35 @@ public class PwdForgetServlet extends HttpServlet {
             }
         } catch (SQLException | MessagingException | ServletException | IOException ex) {
             Logger.getLogger(PwdForgetServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(PwdForgetServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+
+    
+    private boolean isRepeatSubmit(HttpServletRequest request) {
+        String client_token = request.getParameter("token");
+
+        if(client_token==null){
+            return true;
+        }
+
+        String server_token = (String) request.getSession().getAttribute("token");
+
+        if(server_token==null){
+            return true;
+        }
+
+        if(!client_token.equals(server_token)){
+            return true;
+        }
+
+        return false;
+    }    
+    
+    
+    
     /**
      * Returns a short description of the servlet.
      *

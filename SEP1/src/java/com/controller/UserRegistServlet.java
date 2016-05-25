@@ -6,7 +6,7 @@
 package com.controller;
 
 import com.register.UserRegister;
-import com.util.ConnMysqlUtility;
+import com.util.ConnOracleUtility;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "UserRegistServlet", urlPatterns = {"/UserRegistServlet"})
 public class UserRegistServlet extends HttpServlet {
 
-    private ConnMysqlUtility cm = null;
+    private ConnOracleUtility cm = null;
     
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -47,7 +47,7 @@ public class UserRegistServlet extends HttpServlet {
         String success_message = vendorID;
         
         try {
-            cm = new ConnMysqlUtility();
+            cm = new ConnOracleUtility();
         } catch (Exception ex) {
             Logger.getLogger(UserRegistServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

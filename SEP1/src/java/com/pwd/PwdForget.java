@@ -9,23 +9,21 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.mail.Authenticator;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.*;
-import com.util.ConnMysqlUtility;
+import com.util.ConnOracleUtility;
+import javax.mail.Authenticator;
+import javax.mail.MessagingException;
 
 /**
  *
  * @author Chen
  */
 public class PwdForget {       
-    private ConnMysqlUtility conn = null;    
+    private ConnOracleUtility conn = null;    
     private Statement stmt = null;
     private ResultSet rs = null;
     
@@ -35,7 +33,7 @@ public class PwdForget {
     
 
     
-    public PwdForget(ConnMysqlUtility conn) {
+    public PwdForget(ConnOracleUtility conn) {
         this.conn = conn;
     }
     
@@ -47,65 +45,53 @@ public class PwdForget {
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select * from user where vendor_id='" + vendorID + "'";
+            String sql = "select * from USERTABLE where SUPPLIER_ACCOUNT='" + vendorID + "'";   //
           
             rs = stmt.executeQuery(sql); 
 
             while (rs.next()) {
                 
-                pass = vendorID.equals(rs.getString("vendor_id"));
+                pass = vendorID.equals(rs.getString("SUPPLIER_ACCOUNT"));
                 
             }
         } 
         catch (SQLException e) {
             throw e;
         }
-        finally {
-            rs.close();
-            stmt.close();
-        }
-        
+
         return pass;
     }
     
     
     
     
-    public void sendUserEmail(String host, String port, String userName, String password, String toEmail, String subject, String message) throws MessagingException {
+    public void sendUserEmail(EmailEntry eentry) throws MessagingException {
                   
-        Properties prop = System.getProperties();
-            
-        prop.put("mail.smtp.host", host);
-        prop.put("mail.smtp.port", port);
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        prop.put("mail.smtp.socketFactory.port", port);
-        prop.put("mail.smtp.socketFactory.fallback", "false");
+        Properties props = new Properties();
+        props.put("mail.smtp.host", eentry.getHost()); //SMTP Host
+        props.put("mail.smtp.socketFactory.port", eentry.getPort()); //SSL Port
+        props.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
+        props.put("mail.smtp.auth", "true"); //Enabling SMTP Authentication
+        props.put("mail.smtp.port", eentry.getPort()); //SMTP Port
+
 
         Authenticator auth = new Authenticator() {
-            @Override
-            public PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(userName, password);
+            //override the getPasswordAuthentication method
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(eentry.getUserName(), eentry.getPassword());
             }
         };
-
-        Session session = Session.getDefaultInstance(prop, auth);
-
+        Session session = Session.getDefaultInstance(props, auth);
         Message msg = new MimeMessage(session);
-
-        msg.setFrom(new InternetAddress(userName));
-
-        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
-
-        msg.setContent(message, "text/html");
-
-        msg.setSubject(subject);
-
-        Transport transport = session.getTransport("smtp");
-
-        transport.connect("smtp.gmail.com", userName, password);  //gmail
-
-        transport.sendMessage(msg, msg.getAllRecipients());
+        
+        msg.setFrom(new InternetAddress(eentry.getUserName()));
+        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(eentry.getToEmail()));
+        msg.setContent(eentry.getMessage(), "text/html");
+        msg.setSubject(eentry.getSubject());
+        
+        Transport.send(msg);
+        
     }   
     
     
@@ -116,52 +102,44 @@ public class PwdForget {
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select email from user where vendor_id='" + vendorID + "'";
+            String sql = "select EMAIL from USERTABLE where SUPPLIER_ACCOUNT='" + vendorID + "'";
             rs = stmt.executeQuery(sql);   
             
             //extract data from result set
             while (rs.next()) {
-                email = rs.getString("email");
+                email = rs.getString("EMAIL");
             }
         } 
         catch (SQLException e) {
             throw e;
         } 
-        finally {
-            rs.close();
-            stmt.close();
-        }
         
         return email;
     }
           
-    //close ConnMysqlUtility conn here when pwd forget function finish
+    
+    
     //save the user temp password & outDate
-    public boolean saveChangeToDB(String outDate, String vendorID, String password) throws SQLException {
+    public boolean saveChangeToDB(String outDate, String vendorID, String password, EmailEntry eentry) throws SQLException, MessagingException {
         boolean pass = false;
 
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "UPDATE user SET outdate='" + outDate + "' ,password='" + password + "' WHERE vendor_id='" + vendorID + "'";
+            String sql = "UPDATE USERTABLE SET outdate='" + outDate + "' ,PWD='" + password + "' WHERE SUPPLIER_ACCOUNT='" + vendorID + "'";
 
             
             if(stmt.executeUpdate(sql) > 0) {
                 pass = true;
+                if(pass == true)
+                    this.sendUserEmail(eentry);
             }
            
         }
         catch (SQLException e) {
             throw e;
         } 
-        finally {
-            stmt.close();
-            try {
-                this.conn.close();
-            } catch (Exception ex) {
-                Logger.getLogger(PwdForget.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+
         return pass;  
     }
     
@@ -171,7 +149,7 @@ public class PwdForget {
         Date date = new Date();
         GregorianCalendar gc = new GregorianCalendar();
         //MM -> month; mm -> mins
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sf = new SimpleDateFormat("dd-MMM-yyyy");
         gc.setTime(date);
         gc.add(field, value);
         gc.set(gc.get(Calendar.YEAR),gc.get(Calendar.MONTH),gc.get(Calendar.DATE));
@@ -223,6 +201,5 @@ public class PwdForget {
         }
 
         return sb.toString();
-    } 
-    
+    }    
 }

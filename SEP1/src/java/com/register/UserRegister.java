@@ -5,7 +5,7 @@
  */
 package com.register;
 
-import com.util.ConnMysqlUtility;
+import com.util.ConnOracleUtility;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * @author Chen
  */
 public class UserRegister {
-    private ConnMysqlUtility conn = null;    
+    private ConnOracleUtility conn = null;    
     private Statement stmt = null;
     private ResultSet rs = null;
     
@@ -31,7 +31,7 @@ public class UserRegister {
     
     
     
-    public UserRegister(ConnMysqlUtility conn) {
+    public UserRegister(ConnOracleUtility conn) {
         this.conn = conn;
     }
     
@@ -45,7 +45,7 @@ public class UserRegister {
             try {
                 conn.getConnection();
                 stmt = this.conn.getConnection().createStatement();
-                String sql = "UPDATE user SET password='" + re_pwd + "'" + ",email='" + email + "'" + "where vendor_id='" + vendorID + "'";
+                String sql = "UPDATE USERTABLE SET PWD='" + re_pwd + "'" + ",EMAIL='" + email + "'" + "where SUPPLER_ACCOUNT='" + vendorID + "'";   // need to change table name and fields
                 if(stmt.executeUpdate(sql) > 0) {
                     regist = true;
                 }      
@@ -75,16 +75,16 @@ public class UserRegister {
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select vendor_id from user where vendor_id='" + vendorID + "'";
+            String sql = "select SUPPLER_ACCOUNT from user where SUPPLER_ACCOUNT='" + vendorID + "'";   //
             rs = stmt.executeQuery(sql);
 
             while(rs.next()) 
             {
-                if(rs.getString("vendor_id") != null) 
+                if(rs.getString("SUPPLER_ACCOUNT") != null)     //
                 {
                     pass = true;
                 }
-            }
+            } 
         } 
         catch (SQLException e) {
             throw e;

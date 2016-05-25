@@ -94,7 +94,7 @@ public final class UserRegistration_jsp extends org.apache.jasper.runtime.HttpJs
       out.write("                }              \n");
       out.write("                \n");
       out.write("                if(Bletter < 1 && count < 8 && number < 2) {\n");
-      out.write("                    alert(\"password must at least 8 characters long, and at least one capital letters and two numbers\");\n");
+      out.write("                    alert(\"Note:  Password must at least 8 characters long, and at least one capital letters and two numbers\");\n");
       out.write("                    document.getElementById(\"b\").value = \"\";\n");
       out.write("\n");
       out.write("                    return false;\n");

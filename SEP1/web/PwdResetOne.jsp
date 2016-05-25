@@ -42,6 +42,7 @@
                             <label>Vendor ID: </label>
                         </th>
                         <td class="r_right">
+                            <input type="hidden" name="token" value="${token}"/>
                             <input id="input" type="text" name="vendorID" class="txt" /> 
                         </td>   
                     </tr>

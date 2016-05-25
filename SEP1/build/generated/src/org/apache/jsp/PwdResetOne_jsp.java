@@ -89,6 +89,9 @@ public final class PwdResetOne_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                            <label>Vendor ID: </label>\n");
       out.write("                        </th>\n");
       out.write("                        <td class=\"r_right\">\n");
+      out.write("                            <input type=\"hidden\" name=\"token\" value=\"");
+      out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${token}", java.lang.String.class, (PageContext)_jspx_page_context, null));
+      out.write("\"/>\n");
       out.write("                            <input id=\"input\" type=\"text\" name=\"vendorID\" class=\"txt\" /> \n");
       out.write("                        </td>   \n");
       out.write("                    </tr>\n");
