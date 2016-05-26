@@ -1,0 +1,81 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 03/05/2016, 9:45:43 PM
+    Author     : Nick
+*/
+
+/*Desktop Responsive*/
+@media
+    only screen and
+    (min-width: 1025px) {
+        .hideable {
+            display: table-cell;
+        }
+        td {
+            font-size:13px;
+        }
+        th {
+            font-size:15px;
+        }
+}
+/*Tablet Responsive*/
+@media
+    only screen and
+    (min-width: 768px) and (max-width: 1024px)  {
+        .hideable {
+            display:table-cell;
+        }
+        td {
+            font-size: 12px;
+        }
+        th {
+            font-size: 14px;
+        }
+        
+}
+/*Mobile Responsive*/
+@media
+    only screen and
+    (max-width: 767px) {
+        .hideable {
+            display:none;
+        }
+        td {
+            font-size:11px;
+            font-size:12px;
+        }
+        th {
+            font-size:12px;
+        }
+}
+
+#userMenu {
+    border: 1px solid black;
+    float:right;
+    margin-bottom:10px;
+    padding:10px;
+}
+#userMenu > ul li {
+    margin-bottom:12px;
+}
+thead {
+    border:1px solid black;
+}
+.menuLink {
+    cursor:pointer;
+}
+#tableDIV {
+    text-align: center;
+}
+#invoiceList tr {
+    cursor: pointer;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           
+}
