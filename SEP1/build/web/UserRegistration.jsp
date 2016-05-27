@@ -22,26 +22,26 @@
                 document.getElementById("b").value = "";
                 document.getElementById("c").value = "";
                 document.getElementById("d").value = "";
+                document.getElementById("e").value = "";
             }
             
             function check() {
-                var pwd1 = document.getElementById("b");
-                var pwd2 = document.getElementById("c");
+                var pwd1 = document.getElementById("c");
+                var pwd2 = document.getElementById("d");
                 if(pwd1.value != pwd2.value) {
                     alert("password wrong");
-                    document.getElementById("c").value = "";
+                    document.getElementById("d").value = "";
 
                     return false;
                 }
             }
-            
-            
+                      
             function pwdStandard() {
                 var letter = 0;
                 var Bletter = 0;
                 var number = 0;
                 var count = 0;
-                var pwd = document.getElementById("b").value;
+                var pwd = document.getElementById("c").value;
                 var len = pwd.length;
                 for(var i = 0; i < len; i++) {
                     if(pwd[i] >= 48 && pwd[i] <=57)
@@ -56,7 +56,7 @@
                 
                 if(Bletter < 1 && count < 8 && number < 2) {
                     alert("Note:  Password must at least 8 characters long, and at least one capital letters and two numbers");
-                    document.getElementById("b").value = "";
+                    document.getElementById("c").value = "";
 
                     return false;
                 }                     
@@ -75,6 +75,7 @@
                 </span>
             </div>
             <% String regist_message = (String)(request.getAttribute("regist_message")); %>
+            
             <% if(regist_message == null) {
                 regist_message = " ";
             } %>
@@ -92,10 +93,18 @@
                     </tr>
                     <tr>
                         <th>
-                            <label>Password: </label>
+                            <label>Temporary Password: </label>
                         </th>
                         <td>
-                            <input id="b" type="password" name="password" class="txt" onchange="pwdStandard()"/>
+                            <input id="b" type="password" name="tmp_password" class="txt"/>
+                        </td>
+                    </tr>                    
+                    <tr>
+                        <th>
+                            <label>New Password: </label>
+                        </th>
+                        <td>
+                            <input id="c" type="password" name="password" class="txt" onchange="pwdStandard()"/>
                         </td>
                     </tr>
                     <tr>
@@ -103,7 +112,7 @@
                             <label>Re-password: </label>
                         </th>
                         <td>
-                            <input id="c" type="password" name="re_password" class="txt" onchange="check()"/>
+                            <input id="d" type="password" name="re_password" class="txt" onchange="check()"/>
                         </td>
                     </tr> 
                     <tr>
@@ -112,7 +121,7 @@
                             
                         </th>
                         <td>
-                            <input id="d" type="text" name="email" class="txt" />
+                            <input id="e" type="text" name="email" class="txt" />
                         </td>
                     </tr> 
                     </br>
