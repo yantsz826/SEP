@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.controller;
 
 import com.pwd.EmailEntry;
@@ -28,7 +23,7 @@ public class PwdForgetServlet extends HttpServlet {
     
     private ConnOracleUtility cm = null;
     private final String host = "smtp.gmail.com";             //gmail host for testing  "smtp.gmail.com"
-    private final String port = "465";            //port for testing   "465", for TLS/STARTTLS 587
+    private final String port = "587";            //port for testing 
     
     //any mail account -> sender
     private final String username = "";   //sender email
@@ -36,9 +31,6 @@ public class PwdForgetServlet extends HttpServlet {
     private final String subject = "Temporary Password";
     
     //1->year, 2->month, 3->week, 5->day
-    private final int field1 = 1;
-    private final int field2 = 2;
-    private final int field3 = 3;
     private final int field5 = 5;
     
 
@@ -53,18 +45,7 @@ public class PwdForgetServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        /**
-         *  judge if it submitted before, so we need have token at previous page
-         *  create token, and set token like request.getSession().setAttribute("token", token);
-         *  String token = TokenProccessor.getInstance().makeToken();
-         *  
-         */
-        boolean bo = isRepeatSubmit(request);
-        if(bo != true) {
-            request.getSession().removeAttribute("token");
-        }      
-
+            
         String vendorID = request.getParameter("vendorID");
         //error message to pwd reset page
         String errorMessage = "Error: Invalid vendor ID !";
@@ -79,14 +60,23 @@ public class PwdForgetServlet extends HttpServlet {
         try {
             if(pf.identifyUser(vendorID) == true) {
                 String dateString;   
-                //get outdate； field3 -> week
+                
                 dateString = pf.getOutDate(field5, 1);
                 //email content
                 String pwd = pf.pwdGenerator();
-                String message = "This is your temporary passoword ' " + pwd
-                        + " ' for your account ' " + vendorID + " '.<br>" + "Please"
-                        + " note the temporary password is only avaiable before " + dateString + "." +
-                        "<br><br><br>" + "Best Regards," + "<br><br>" + "Curtin University";
+                String message = "Dear user," + "<br><br>" + "A password reset has been requested for the account registered" 
+                        + "to this email address on the Curtin Finance Vendor Portal." 
+                        + "<br>"
+                        + "If you have not requested this, please contact Curtin Finance on (08) 1234 5678."
+                        + "<br>"
+                        + "If you have requested this, you can now register your account (https://finance.curtin.edu.au/VendorPortal)"
+                        + "using the temporary password below. This password will be valid for 12 hours before you will need to request a new one."
+                        + "<br>"
+                        + "Temporary Password: " + pwd
+                        + "<br>"
+                        + "Note the temporary password is only avaiable before " + dateString + "." 
+                        + "<br><br><br>" + "Best Regards," + "<br><br>" + "Curtin Finance";
+                
                 //get user email
                 String toEmail = pf.getRegisteredEmail(vendorID);
                 //email message to pwd reset page two
@@ -115,30 +105,8 @@ public class PwdForgetServlet extends HttpServlet {
         }
     }
 
-
     
-    private boolean isRepeatSubmit(HttpServletRequest request) {
-        String client_token = request.getParameter("token");
 
-        if(client_token==null){
-            return true;
-        }
-
-        String server_token = (String) request.getSession().getAttribute("token");
-
-        if(server_token==null){
-            return true;
-        }
-
-        if(!client_token.equals(server_token)){
-            return true;
-        }
-
-        return false;
-    }    
-    
-    
-    
     /**
      * Returns a short description of the servlet.
      *

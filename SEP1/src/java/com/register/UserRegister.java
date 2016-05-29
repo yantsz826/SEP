@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.register;
 
 import com.util.ConnOracleUtility;
@@ -48,7 +43,7 @@ public class UserRegister {
             try {
                 conn.getConnection();
                 stmt = this.conn.getConnection().createStatement();
-                String sql = "update user set pwd='" + re_pwd + "'" + ", email='" + email + "'" + ", out_date=" + "null" + " where vendorID='" + vendorID + "'";   // need to change table name and fields
+                String sql = "update FINANCE_WEB_USERS set USERPASSWORD='" + re_pwd + "'" + ", EMAILADDR='" + email + "'" + ", OUTDATE" + "null" + " where VENDORNO='" + vendorID + "'";   // need to change table name and fields
                 if(stmt.executeUpdate(sql) > 0) {
                     regist = true;
                 }      
@@ -78,12 +73,12 @@ public class UserRegister {
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select vendorID from user where vendorID='" + vendorID + "'";   //
+            String sql = "select VENDORNO from FINANCE_WEB_USERS where VENDORNO='" + vendorID + "'";
             rs = stmt.executeQuery(sql);
 
             while(rs.next()) 
             {
-                pass = vendorID.equals(rs.getString("vendorID"));
+                pass = vendorID.equals(rs.getString("VENDORNO"));
             } 
         } 
         catch (SQLException e) {
@@ -102,19 +97,20 @@ public class UserRegister {
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select out_date from user where vendorID='" + vendorID + "'" + "and pwd='" + tmp_password + "'";   //
+            String sql = "select OUTDATE from FINANCE_WEB_USERS where VENDORNO='" + vendorID + "'" + "and USERPASSWORD='" + tmp_password + "'";   //
             rs = stmt.executeQuery(sql);
 
             while(rs.next()) 
             {
                 //SimpleDateFormat sf = new SimpleDateFormat("dd-MMM-yyyy");
-                if(rs.getString("out_date") != null)     //
+                if(rs.getString("OUTDATE") != null)     //
                 {
                     Date date = new Date();
-                    Date expiredDate = rs.getDate("out_date");
+                    Date expiredDate = rs.getDate("OUTDATE");
                     //pass = date.after(expiredDate);
                     pass = date.before(expiredDate);
                 }
+                
             } 
         } 
         catch (SQLException e) {

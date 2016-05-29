@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pwd;
 
 import java.sql.*;
@@ -45,13 +40,13 @@ public class PwdForget {
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select * from USERTABLE where SUPPLIER_ACCOUNT='" + vendorID + "'";   //
+            String sql = "select * from FINANCE_WEB_USERS where VENDORNO='" + vendorID + "'"; 
           
             rs = stmt.executeQuery(sql); 
 
             while (rs.next()) {
                 
-                pass = vendorID.equals(rs.getString("SUPPLIER_ACCOUNT"));
+                pass = vendorID.equals(rs.getString("VENDORNO"));
                 
             }
         } 
@@ -68,12 +63,10 @@ public class PwdForget {
     public void sendUserEmail(EmailEntry eentry) throws MessagingException {
                   
         Properties props = new Properties();
-        props.put("mail.smtp.host", eentry.getHost()); //SMTP Host
-        props.put("mail.smtp.socketFactory.port", eentry.getPort()); //SSL Port
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
-        props.put("mail.smtp.auth", "true"); //Enabling SMTP Authentication
-        props.put("mail.smtp.port", eentry.getPort()); //SMTP Port
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", eentry.getHost());
+        props.put("mail.smtp.port", eentry.getPort());  
 
 
         Authenticator auth = new Authenticator() {
@@ -102,12 +95,12 @@ public class PwdForget {
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select EMAIL from USERTABLE where SUPPLIER_ACCOUNT='" + vendorID + "'";
+            String sql = "select EMAILADDR from FINANCE_WEB_USERS where VENDORNO='" + vendorID + "'";
             rs = stmt.executeQuery(sql);   
             
             //extract data from result set
             while (rs.next()) {
-                email = rs.getString("EMAIL");
+                email = rs.getString("EMAILADDR");
             }
         } 
         catch (SQLException e) {
@@ -126,7 +119,7 @@ public class PwdForget {
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "UPDATE user SET out_date='" + outDate + "' ,pwd='" + password + "' WHERE vendorID='" + vendorID + "'";
+            String sql = "UPDATE FINANCE_WEB_USERS SET OUTDATE='" + outDate + "' ,USERPASSWORD='" + password + "' WHERE VENDORNO='" + vendorID + "'";
 
             
             if(stmt.executeUpdate(sql) > 0) {
