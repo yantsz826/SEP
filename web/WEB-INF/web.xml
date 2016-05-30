@@ -57,6 +57,10 @@
         <url-pattern>/LogIn_Servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>UserRegistServlet</servlet-name>
+        <url-pattern>/UserRegistServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>UserHome_Servlet</servlet-name>
         <url-pattern>/UserHome_Servlet</url-pattern>
     </servlet-mapping>

@@ -1,7 +1,8 @@
 <%-- 
     Document   : UserHome
     Created on : 12/05/2016, 9:54:28 PM
-    Author     : Nick
+    Author     : Nicholas Lawrence
+    Student    : 17075930
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -89,11 +90,11 @@
                 </li>
             </ul>
         </div>
-        <form name="userMenuForm" action="UserHome_Servlet">
+        <form name="userMenuForm" action="UserHome_Servlet" method="POST">
             <div id="tableDIV">
                 <table id="invoiceList" class="display" cellspacing="0" width="100%">
                 </table>
-                <input type="hidden" name="invRef">
+                <input type="hidden" id="hTxt" name="invRef" class="rTxt" />
             </div>
             <button id="getDetailsBtn" type="submit" action="UserHome_Servlet">Get Details</button>
         </form>

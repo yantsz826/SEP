@@ -5,6 +5,7 @@
  */
 package com.webportal.controller;
 
+import com.webportal.models.AESCrypt;
 import com.webportal.pwd.EmailEntry;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -31,8 +32,8 @@ public class PwdForgetServlet extends HttpServlet {
     private final String port = "465";            //port for testing   "465", for TLS/STARTTLS 587
     
     //any mail account -> sender
-    private final String username = "";   //sender email
-    private final String password = "";   //sender email pwd
+    private final String username = "sep13test@gmail.com";   //sender email
+    private final String password = "sep1group13";   //sender email pwd
     private final String subject = "Temporary Password";
     
     //1->year, 2->month, 3->week, 5->day
@@ -83,16 +84,29 @@ public class PwdForgetServlet extends HttpServlet {
                 dateString = pf.getOutDate(field5, 1);
                 //email content
                 String pwd = pf.pwdGenerator();
-                String message = "This is your temporary passoword ' " + pwd
-                        + " ' for your account ' " + vendorID + " '.<br>" + "Please"
-                        + " note the temporary password is only avaiable before " + dateString + "." +
-                        "<br><br><br>" + "Best Regards," + "<br><br>" + "Curtin University";
+                String message = "Dear user, <br /><br />" +
+                        "A password reset has been requested for the account " +
+                        "registered to this email address on the Curtin " + 
+                        "Finance Vendor Portal.<br /><br />" +
+                        "If you have not requested this, please contact " +
+                        "Curtin Finance on (08) 1234 5678.<br /><br />" + 
+                        "If you have requested this, you can now log in to " +
+                        "the Vendor Portal (<a " +
+                        "href='https://finance.curtin.edu.au/VendorPortal'>" +
+                        "https://finance.curtin.edu.au/VendorPortal</a>) " +
+                        "using the temporary password below. This password " +
+                        "will be valid for 24 hours before you will need " +
+                        "to request a new one.<br /><br />" +
+                        "Temporary Password: " + pwd +"<br /><br />" +
+                        "Regards,<br />" +
+                        "Curtin Finance";
+                
                 //get user email
                 String toEmail = pf.getRegisteredEmail(vendorID);
                 //email message to pwd reset page two
                 String emailMessage = toEmail;
                 
-                if(pf.saveChangeToDB(dateString, vendorID, pwd, new EmailEntry(host, port, username, password, toEmail, subject, message)) == true) {
+                if(pf.saveChangeToDB(dateString, vendorID, AESCrypt.encrypt(pwd), new EmailEntry(host, port, username, password, toEmail, subject, message)) == true) {
                     request.setAttribute("email_message", emailMessage);
                     request.getRequestDispatcher("/PwdResetTwo.jsp").forward(request, response);
                     cm.close();
@@ -108,7 +122,7 @@ public class PwdForgetServlet extends HttpServlet {
                 request.setAttribute("error_message", errorMessage);
                 request.getRequestDispatcher("/PwdResetOne.jsp").forward(request, response);
             }
-        } catch (SQLException | MessagingException | ServletException | IOException ex) {
+        } catch (ServletException | IOException ex) {
             Logger.getLogger(PwdForgetServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(PwdForgetServlet.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,8 +1,15 @@
 package com.webportal.controller;
 
+import com.webportal.SendEmail;
+import com.webportal.models.AESCrypt;
+import com.webportal.models.PwdReset;
+import com.webportal.pwd.PwdForget;
+import com.webportal.util.ConnOracleUtility;
 import java.io.IOException;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -11,9 +18,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import com.webportal.models.PwdReset;
-import com.webportal.models.AESCrypt;
 
 /**
  * Servlet implementation class UserEdit_Servlet
@@ -41,6 +47,9 @@ public class UserEdit extends HttpServlet
 		// TODO Auto-generated method stub
 		/* some sql to get the information */
 		RequestDispatcher view = request.getRequestDispatcher("/edit_user.jsp");
+        HttpSession session = request.getSession();
+        session.setAttribute("authenticated", "true");
+        session.setAttribute("username", session.getAttribute("username"));
 		try
 		{
 			/*
@@ -66,8 +75,7 @@ public class UserEdit extends HttpServlet
 			 * parameters of string type connection url, user name and password
 			 * to connect to database.
 			 */
-			//connection = DriverManager.getConnection(connectionURL, "SYSTEM", "A08261993");
-                        connection = DriverManager.getConnection(connectionURL, "SYSTEM", "password");
+            connection = DriverManager.getConnection(connectionURL, "SYSTEM", "password");
 			/*
 			 * createStatement() is used for create statement object that is
 			 * used for sending sql statements to the specified database.
@@ -124,8 +132,12 @@ public class UserEdit extends HttpServlet
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+    @SuppressWarnings("empty-statement")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{	
+        HttpSession session = request.getSession();
+        session.setAttribute("authenticated", "true");
+        session.setAttribute("username", session.getAttribute("username"));
 		try
 		{
 			/*
@@ -151,8 +163,7 @@ public class UserEdit extends HttpServlet
 			 * parameters of string type connection url, user name and password
 			 * to connect to database.
 			 */
-			//connection = DriverManager.getConnection(connectionURL, "SYSTEM", "A08261993");
-                        connection = DriverManager.getConnection(connectionURL, "SYSTEM", "password");
+            connection = DriverManager.getConnection(connectionURL, "SYSTEM", "password");
 			/*
 			 * createStatement() is used for create statement object that is
 			 * used for sending sql statements to the specified database.
@@ -165,11 +176,37 @@ public class UserEdit extends HttpServlet
 				String userID = request.getParameter("Reset");
 				PwdReset pwdReset = new PwdReset();
 				String newPWD = pwdReset.pwdGenerator();
+                String pwd = newPWD;
 				request.setAttribute("resetPWD", newPWD);		
 				newPWD = AESCrypt.encrypt(newPWD); 
-				String updateString = "UPDATE FINANCE_WEB_USERS SET USERPASSWORD='"+newPWD+"'"+" WHERE VENDORNO='" +userID+"'";
-				statement.executeQuery(updateString);
-				request.setAttribute("Reset", null);				
+                Calendar curDay = Calendar.getInstance();
+                curDay.add(curDay.DAY_OF_MONTH,1);
+                String dateString = new SimpleDateFormat("dd-MM-YYYY").format(curDay.getTime());                
+				String updateString = "UPDATE FINANCE_WEB_USERS SET USERPASSWORD= ?, OUTDATE = TO_DATE(?,'DD-MM-YYYY') WHERE VENDORNO= ? ";
+                PreparedStatement pstmt = connection.prepareStatement( updateString );
+                pstmt.setString( 1, newPWD); 
+                pstmt.setString( 2, dateString); 
+                pstmt.setString( 3, userID); 
+                pstmt.executeQuery();
+				request.setAttribute("Reset", null);	
+                ConnOracleUtility newConn = new ConnOracleUtility();
+                
+                PwdForget pf = new PwdForget(newConn);
+                    
+                String username = "seven.albany.bi@gmail.com";
+                String passwordForEmail = "Seven1206";
+                if(pf.identifyUser(userID))
+                {
+                    //email content
+                    String message = "This is your temporary passoword " + pwd
+                            + " for your account " + userID + "\nPlease note the temporary password is only avaiable before " + dateString + "." +
+                             "\n\nBest Regards, Curtin University";
+                    //get user email
+                    System.out.println(dateString);
+                    String toEmail = pf.getRegisteredEmail(userID);
+                   // pf.saveChangeToDB(dateString, newUserID, pwd, new EmailEntry(host, port, username, passwordForEmail, toEmail, subject, message));
+                   SendEmail.sendEmail(username,passwordForEmail, toEmail,message);
+                }
 			}
 			
 			/*delete user*/
@@ -178,7 +215,6 @@ public class UserEdit extends HttpServlet
 				String userID = request.getParameter("Delete");
 				String deleteString = "DELETE FROM FINANCE_WEB_USERS WHERE VENDORNO='" +userID+"'";
 				statement.executeQuery(deleteString);
-				request.setAttribute("Delete", null);
 			}
 			/*edit user*/
 			if(request.getParameter("submitBut") != null)
@@ -188,8 +224,12 @@ public class UserEdit extends HttpServlet
 					String userID = request.getParameter("submitBut");
 					String newUserID = request.getParameter("editUserID");
 					String newEmail = request.getParameter("editEmail");
-					String updateString = "UPDATE FINANCE_WEB_USERS SET VENDORNO='"+newUserID+"', EMAILADDR='"+newEmail+"' WHERE VENDORNO='" +userID+"'";
-					statement.executeQuery(updateString);
+					String updateString = "UPDATE FINANCE_WEB_USERS SET VENDORNO= ?, EMAILADDR= ? WHERE VENDORNO= ? ";
+                                        PreparedStatement pstmt = connection.prepareStatement( updateString );
+                                        pstmt.setString( 1, newUserID); 
+                                        pstmt.setString( 2, newEmail); 
+                                        pstmt.setString( 3, userID); 
+                                        pstmt.executeQuery();
 				}
 				request.setAttribute("submitBut", null);	
 			}
@@ -202,10 +242,42 @@ public class UserEdit extends HttpServlet
 					String newUserID = request.getParameter("addUserID");
 					String newEmail = request.getParameter("addEmail");
 					PwdReset pwdReset = new PwdReset();
-					String password = pwdReset.pwdGenerator();		
+					String password = pwdReset.pwdGenerator();	
+                    String pwd = password;
 					password = AESCrypt.encrypt(password); /* or should be default? password = "Abcd1234"*/
-					String addString = "INSERT INTO FINANCE_WEB_USERS VALUES ('"+newUserID+"','"+password+"','"+newEmail+"',0)";
-					statement.executeQuery(addString);
+					String addString = "INSERT INTO FINANCE_WEB_USERS VALUES (?, ?, ?, 0, null)";
+                    PreparedStatement pstmt = connection.prepareStatement( addString );
+                    pstmt.setString( 1, newUserID); 
+                    pstmt.setString( 2, password); 
+                    pstmt.setString( 3, newEmail); 
+                    pstmt.executeQuery();
+
+                    ConnOracleUtility newConn = new ConnOracleUtility();
+                
+                    PwdForget pf = new PwdForget(newConn);
+                    
+                    String username = "seven.albany.bi@gmail.com";
+                    String passwordForEmail = "Seven1206";
+                    if(pf.identifyUser(newUserID))
+                    {
+                        Calendar curDay = Calendar.getInstance();
+                        curDay.add(curDay.DAY_OF_MONTH,1);
+                        String dateString = new SimpleDateFormat("dd-MM-YYYY").format(curDay.getTime()); 
+                        //email content
+                        String message = "This is your temporary passoword " + pwd
+                                + " for your account " + newUserID + "\nPlease note the temporary password is only avaiable before " + dateString + "." +
+                                 "\n\nBest Regards, Curtin University";
+                        //get user email
+                        System.out.println(dateString);
+                        String toEmail = pf.getRegisteredEmail(newUserID);
+                        String updateString = "UPDATE FINANCE_WEB_USERS SET OUTDATE = TO_DATE(?,'DD-MM-YYYY') WHERE VENDORNO= ?";
+                        PreparedStatement pstmt1 = connection.prepareStatement( updateString ); 
+                        pstmt1.setString( 1, dateString); 
+                        pstmt1.setString( 2, newUserID); 
+                        pstmt1.executeQuery();
+                       // pf.saveChangeToDB(dateString, newUserID, pwd, new EmailEntry(host, port, username, passwordForEmail, toEmail, subject, message));
+                       SendEmail.sendEmail(username,passwordForEmail, toEmail,message);
+                    }
 				}
 				request.setAttribute("AddUser", null);
 				
@@ -287,10 +359,9 @@ public class UserEdit extends HttpServlet
 			statement.close();
 			connection.close();
 		} catch (Exception ex)
-		{
-			
-			System.out.println("Unable to connect to database.");
-			System.out.println(ex);
+		{			
+			System.out.println(ex.toString());
+            ex.printStackTrace();
 		}
 		
 		RequestDispatcher view = request.getRequestDispatcher("/edit_user.jsp");

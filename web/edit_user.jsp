@@ -22,8 +22,18 @@ var jsArr = new Array(<%=((Integer)request. getAttribute("count"))%>);
 for (int i=0; i <((Integer)request.getAttribute("count")); i++) {  
 %>  
 jsArr[<%= i %>] = new Array(5);
+<%
+if(((Object[])request.getAttribute("account"))[i].equals(((Object[])request.getAttribute("displayAc"))[i]))
+{%>
 jsArr[<%= i %>][0] = '<%=((Object[])request.getAttribute("displayAc"))[i]%>';  
 jsArr[<%= i %>][1] = '<%=((Object[])request.getAttribute("displayEmail"))[i]%>'; 
+<%
+}
+else
+{%>
+jsArr[<%= i %>][0] = '<%=((Object[])request.getAttribute("account"))[i]%> : <%=((Object[])request.getAttribute("displayAc"))[i]%>';  
+jsArr[<%= i %>][1] = '<%=((Object[])request.getAttribute("email"))[i]%> : <%=((Object[])request.getAttribute("displayEmail"))[i]%>'; 
+<%}%>
 <%
 if(((Integer)(((Object[])request.getAttribute("admin"))[i])) == 0)
 {
@@ -40,7 +50,7 @@ else
 %>
 jsArr[<%= i %>][3] = '<button name="Reset" type="submit" value="<%=((Object[])request.getAttribute("account"))[i]%>">Reset</button>'; 
 jsArr[<%= i %>][4] = '<button name="Edit" type="submit" value="<%=((Object[])request.getAttribute("account"))[i]%>">Edit</button><button name="submitBut" type="submit" value="<%=((Object[])request.getAttribute("account"))[i]%>">submit</button><button name="cancel" type="submit" value="True">cancel</button>'; 
-jsArr[<%= i %>][5] = '<button name="Delete" type="submit" value="<%=((Object[])request.getAttribute("account"))[i]%>">Delete</button>'; 
+jsArr[<%= i %>][5] = '<button name="Delete" type="submit" onclick="if (confirm(\'Do u want to delete\' + \' <%=((Object[])request.getAttribute("account"))[i]%> \')) form.action=\'${pageContext.request.contextPath}/UserEdit\' \; else return false \; " value="<%=((Object[])request.getAttribute("account"))[i]%>">delete</button>'; 
 <%}%> 
 $(document).ready(function() {
     $('#myTable').DataTable( {
@@ -65,7 +75,7 @@ $(document).ready(function() {
           </script>
      <%} %>
 	<h2 style="text-align: center;">User table</h2>
-	<form action="UserEdit_Servlet" method="post">
+	<form action="UserEdit" method="post">
     <table id="addUser">
         <TR>
             <TD>Supplier Account: <input type="text" name="addUserID"></TD>
@@ -74,14 +84,14 @@ $(document).ready(function() {
         <TR>
     </table>
     </form>
-	<form action="UserEdit_Servlet" method="post">
+	<form action="UserEdit" method="post">
 	<table id="myTable" class="display" width="100%"></table>
 	</form>
 	<table>
 		<TR>
-			<!--<TD><FORM ACTION="welcome_to_database_query.jsp" method="get">
+			<TD><FORM ACTION="UserHome.jsp" method="get">
 					<button type="submit">&#60;-- back</button>
-				</FORM></TD>-->
+				</FORM></TD>
 		</TR>
 	</table>
 	

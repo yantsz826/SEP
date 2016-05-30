@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+Author: Nicholas Lawrence
+Student: 17075930
+Last edited: 30/05/2016
+Purpose: GET & POST for user Log In
  */
 package com.webportal;
 
@@ -19,109 +20,29 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
 import java.util.*;
+import java.sql.PreparedStatement;
 
-/**
- *
- * @author Nick
- */
 public class UserHome_Servlet extends HttpServlet
 {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     public UserHome_Servlet()
     {
         super();
     }
-    private String getCookie(String cookieName, HttpServletRequest request)
-    {
-        String val = null;
-        Cookie[] cookies = request.getCookies();
-        
-        for (int i = 0; i < cookies.length; i++)
-        {
-            cookies[i].getName();
-            if (cookies[i].getName() == cookieName)
-            {
-                val = cookies[i].getValue();
-            }
-        }
-        
-        return val;
-    }
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
-        boolean admin = false;
-        Cookie[] cookies = request.getCookies();
-        
-        try
-        {
-            String connectionURL = "jdbc:oracle:thin:@//localhost:1521/XE";
-            
-            Connection connection = null;
-            Statement statement = null;
-            ResultSet rs = null;
-            
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            connection = DriverManager.getConnection(connectionURL, "system", 
-                    "password");
-            statement = connection.createStatement();
-            String queryString = "SELECT ADMINUSER FROM FINANCE_WEB_USERS " +
-                    "WHERE VENDORNO = '" + getCookie("uID", request) + "'";
-            rs = statement.executeQuery(queryString);
-            
-            if (rs.next())
-            {
-                admin = rs.getString("ADMINUSER").equals("1");
-            }
-            rs.close();
-            statement.close();
-            connection.close();
-            if (admin)
-            {
-                request.setAttribute("admin", "true");
-            }
-            else
-            {
-                request.setAttribute("admin", "false");
-            }
-        }
-        catch (Exception e)
-        {
-            System.out.println("Error connecting to database");
-            System.out.println(e.getMessage());
-            System.out.println(e.getStackTrace());
-            System.out.println(e.getLocalizedMessage());
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    /*
+    Get Log in page to display to user. Retrieve invoices belonging to vendor 
+    from database and display to user.
+    */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        //processRequest(request, response);
         RequestDispatcher view = request.getRequestDispatcher("/UserHome.jsp");
         HttpSession session = request.getSession();
         boolean admin = false;
         
-        System.out.println("AUTHENTICATED = " + session.getAttribute("authenticated"));
+        /*
+        If session is not authenticated, redirect user to log in page.
+        */
         if (session.getAttribute("authenticated").equals("true"))
         {
             try
@@ -129,7 +50,6 @@ public class UserHome_Servlet extends HttpServlet
                 String connectionURL = "jdbc:oracle:thin:@//localhost:1521/XE";
 
                 Connection connection = null;
-                Statement statement = null;
                 ResultSet rs = null;
                 List<List<String>> rows = new ArrayList<List<String>>();
                 ArrayList<String> row;
@@ -138,22 +58,28 @@ public class UserHome_Servlet extends HttpServlet
                 Class.forName("oracle.jdbc.driver.OracleDriver");
                 connection = DriverManager.getConnection(connectionURL, "system", 
                         "password");
-                statement = connection.createStatement();
-                String queryString = "SELECT ADMINUSER FROM FINANCE_WEB_USERS " +
-                        "WHERE VENDORNO = '" + session.getAttribute("username") + "'";
-                rs = statement.executeQuery(queryString);
+                //Determine if user has admin permissions
+                String queryString = "SELECT ADMINUSER FROM FINANCE_WEB_USERS" +
+                        " WHERE VENDORNO = ?";
+                PreparedStatement pstmt = connection.prepareStatement(queryString);
+                pstmt.setString(1, (String) session.getAttribute("username"));
+                rs = pstmt.executeQuery();
 
                 if (rs.next())
                 {
                     admin = rs.getString("ADMINUSER").equals("1");
                 }
-                
+                //Select all invoices belonging to the user's vendor number
                 queryString = "SELECT REFERENCE, DOCUMENT_DATE, NARRATION1, STATUS, STAGE FROM WEBPORTAL " + 
-                        "WHERE SUPPLIER_ACCOUNT LIKE '" + session.getAttribute("username") + "'";
+                        "WHERE SUPPLIER_ACCOUNT LIKE ?";
+                pstmt = connection.prepareStatement(queryString);
+                pstmt.setString(1, (String)session.getAttribute("username"));
+                rs = pstmt.executeQuery();
                 
-                statement = connection.createStatement();
-                rs = statement.executeQuery(queryString);
-                
+                /*
+                While there are more rows in the result set, add data to a list
+                of strings.
+                */
                 while (rs.next())
                 {
                     row = new ArrayList<String>();
@@ -163,11 +89,12 @@ public class UserHome_Servlet extends HttpServlet
                     }
                     rows.add(row);
                 }
-                
+                //Set invoice list to session attribute
                 session.setAttribute("invoiceList", Arrays.deepToString(rows.toArray()));
                 rs.close();
-                statement.close();
+                pstmt.close();
                 connection.close();
+                //If admin, set admin attribute
                 if (admin)
                 {
                     session.setAttribute("admin", "true");
@@ -181,7 +108,6 @@ public class UserHome_Servlet extends HttpServlet
             }
             catch (Exception e)
             {
-                System.out.println("Error connecting to database");
                 System.out.println(e.getMessage());
                 System.out.println(e.getStackTrace());
                 System.out.println(e.getLocalizedMessage());
@@ -193,20 +119,17 @@ public class UserHome_Servlet extends HttpServlet
             response.sendRedirect("./LogIn.jsp?LoginFailed");
         }
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    /*
+    Set selected invoice reference to session parameter and redirect user to
+    invoiceDetail page to display in depth detail.
+    */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();
+        session.setAttribute("invoiceReference", request.getParameter("invRef"));
+        response.sendRedirect("./invoiceDetail");
         
     }
 

@@ -1,12 +1,9 @@
+/* 
+Author: Nicholas Lawrence
+Student: 17075930
+Date Edited: 30/05/2016
+ */
 $(document).ready(function () {
-    /*$.fn.dataTable.moment( 'DD/MM/YYYY' );
-    var table = $('#invoiceList').DataTable({
-                "order": [[1, "desc"]]
-            });
-    $('#button').click( function () {
-        table.row('.selected').remove().draw( false );
-    } );*/
-    
     //Responsive Column Visibility
     //Mobile
     if ($(window).width() < 768) {
@@ -16,18 +13,12 @@ $(document).ready(function () {
     $('#editUsersLink').click(function() {
         window.location.replace("./UserEdit");
     });
-    //On log out link click
-    $('#logoutLink').click(function() {
-        //window.location.replace("./UserHome_Servlet.java?LogOut");
+    //On Manage Profile link click
+    $('#editRegLink').click(function() {
+        window.location.replace('./UserRegistration.jsp');
     });
+    //On row select
     $('#invoiceList').click(function() {
-        $('#invRef').append($('.selected .idCol').text());
-        //$('.selected .idCol').text().appendTo($('#invRef'));
-    });
-    $('#getDetailsBtn').click(function() {
-        if ($('#invRef').text().length === 0)
-        {
-            return false;
-        }
+        $('#hTxt').val($('.selected .idCol').text());
     });
 });

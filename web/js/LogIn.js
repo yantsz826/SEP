@@ -1,9 +1,11 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+Author: Nicholas Lawrence
+Student: 17075930
+Date Edited: 30/05/2016
+
  */
 $(document).ready(function() {
+    //If LogInFailed in query string, display error message
     if (window.location.href.indexOf("LogInFailed") > -1)
     {
         $('<p style="color:red;width:100%;">The vendor ID/password combination do not ' +
@@ -11,6 +13,14 @@ $(document).ready(function() {
                 'details are correct and try again.</p>')
                 .insertAfter($('#inputTitle'));
     }
+    //If PasswordExpired in query string, display error message
+    else if (window.location.href.indexOf("PasswordExpired") > -1)
+    {
+        $('<p style="color:red;width:100%;">The temporary password has expired.<br />' + 
+                ' Please request another password in order to be able to log in.</p>')
+                .insertAfter($('#inputTitle'));
+    }
+    //If forgot pwd button clicked, redirect user to pwd reset.
     $('#forgotpwdbtn').click(function () {
         window.location.replace("./PwdResetOne.jsp");
     });

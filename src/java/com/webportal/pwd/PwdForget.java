@@ -126,7 +126,7 @@ public class PwdForget {
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "UPDATE FINANCE_WEB_USERS SET outdate='" + outDate + "' ,USERPASSWORD='" + password + "' WHERE VENDORNO='" + vendorID + "'";
+            String sql = "UPDATE FINANCE_WEB_USERS SET OUTDATE='" + outDate + "' ,USERPASSWORD='" + password + "' WHERE VENDORNO='" + vendorID + "'";
 
             
             if(stmt.executeUpdate(sql) > 0) {

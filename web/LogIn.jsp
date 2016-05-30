@@ -1,7 +1,8 @@
 <%-- 
     Document   : LogIn
     Created on : 10/05/2016, 6:10:00 PM
-    Author     : Nick
+    Author     : Nicholas Lawrence
+    Student    : 17075930
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -23,7 +24,7 @@
             <hr />
             <div id="logincontainer">
                 <p id="inputTitle">Vendor Login</p>
-                <form name="LogInForm" action="LogIn_Servlet">
+                <form name="LogInForm" action="LogIn_Servlet" method="POST">
                     
                     <div class="inputdiv">
                         <span id="vidlbl" class="rTxt">Vendor ID:</span>
@@ -31,7 +32,7 @@
                     </div>
                     <div class="inputdiv">
                         <span id="pwdlbl" class="rTxt">Password:</span>
-                        <input id="pwdTxt" name="password" class="rTxt" autoComplete="off" />
+                        <input id="pwdTxt" name="password" class="rTxt" autoComplete="off" type="password"/>
                     </div>
                     <button id="loginbtn" class="btnTxt" type="submit">Log In</button>
                 </form>

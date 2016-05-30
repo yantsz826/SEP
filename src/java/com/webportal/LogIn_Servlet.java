@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+Author: Nicholas Lawrence
+Student: 17075930
+Last edited: 30/05/2016
+Purpose: GET & POST for user Log In
+*/
 package com.webportal;
 
 import java.io.IOException;
@@ -17,8 +18,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Cookie;
 import com.webportal.models.*;
+import java.util.*;
+import java.sql.PreparedStatement;
 
 
 
@@ -32,120 +34,111 @@ public class LogIn_Servlet extends HttpServlet
     {
         super();
     }
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    
+    /*
+    Get Log In page to display to user.
+    */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        getServletContext().getRequestDispatcher("/LogIn.jsp").forward(
+            request, response);
+    }
+
+    /*
+    Attempt to log user in with provided credentials.
+    */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        //Get user username & password
         String userName = request.getParameter("userName");
         String password = request.getParameter("password");
         boolean status = false;
         HttpSession session = request.getSession();
+        Date date = new Date();
+        Date expDate = null;
+        
         
         try
         {
             String connectionURL = "jdbc:oracle:thin:@//localhost:1521/XE";
-            
+            //Encrypt provided password
             password = AESCrypt.encrypt(password);
             Connection connection = null;
-            Statement statement = null;
             ResultSet rs = null;
             
             Class.forName("oracle.jdbc.driver.OracleDriver");
             connection = DriverManager.getConnection(connectionURL, "system", 
                     "password");
-            statement = connection.createStatement();
+            //Select from users where vendor ID and password match the provided
+            //details
             String queryString = "SELECT * FROM FINANCE_WEB_USERS " +
-                    "WHERE VENDORNO = '" + userName + "' AND USERPASSWORD = '" +
-                    password + "'";
-            rs = statement.executeQuery(queryString);
+                    "WHERE VENDORNO = ? AND USERPASSWORD = ?";
+            PreparedStatement pstmt = connection.prepareStatement(queryString);
+            pstmt.setString(1, userName);
+            pstmt.setString(2, password);
+            rs = pstmt.executeQuery();
             status = rs.next();
+            //If rows are returned, check if there is an expiration date on the 
+            //pwd
+            if (status)
+            {
+                expDate = rs.getDate("OUTDATE");
+            }
             rs.close();
-            statement.close();
+            pstmt.close();
             connection.close();
+            System.out.println(status);
         }
         catch (Exception e)
         {
-            System.out.println("Error connecting to database");
             System.out.println(e.getMessage());
             System.out.println(e.getStackTrace());
             System.out.println(e.getLocalizedMessage());
         }
-        if (status)
+        /*
+        If there is an expiry date, results are returned matching the provided
+        details and the current date is before the expiry date, set 
+        authenticated to true and redirect user to Registration page.
+        */
+        if (expDate != null && status && date.before(expDate))
         {
             session.setAttribute("authenticated", "true");
             session.setAttribute("username", userName);
-            /*for (int i = 0; i < cookies.length; i++)
-            {
-                if (cookies[i].getName().equalsIgnoreCase("login"))
-                {
-                    cookies[i].setValue("true");
-                    Cookie uID = new Cookie("uid", userName);
-                    Cookie pwd = new Cookie("pwd", password);
-                    response.addCookie(cookies[i]);
-                    response.addCookie(uID);
-                    response.addCookie(pwd);
-                    break;
-                }
-            }*/
-            getServletContext().getRequestDispatcher("/UserHome_Servlet").forward(
-            request, response);
+            response.sendRedirect("./UserRegistration.jsp");
         }
+        /*
+        If the temporary password expiry date has already passed set 
+        authenticated to false and redirect user to log in page
+        */
+        else if (expDate != null && date.after(expDate))
+        {
+            session.setAttribute("authenticated", "false");
+            response.sendRedirect("./LogIn.jsp?PasswordExpired");
+        }
+        /*
+        If there is no expiry date on the password but results are returned
+        matching the provided credentials set authenticated to true and redirect
+        user to home page
+        */
+        else if (status)
+        {
+            session.setAttribute("authenticated", "true");
+            session.setAttribute("username", userName);
+            response.sendRedirect("./UserHome_Servlet");
+        }
+        /*
+        If the provided credentials don't return any data set authenticated to 
+        false and redirect the user to the log in page
+        */
         else
         {
-            /*for (int i = 0; i < cookies.length; i++)
-            {
-                if (cookies[i].getName().equalsIgnoreCase("login"))
-                {
-                    cookies[i].setValue("false");
-                    response.addCookie(cookies[i]);
-                    response.sendRedirect("./LogIn.jsp");
-                    break;
-                }
-            }*/
             session.setAttribute("authenticated", "false");
             response.sendRedirect("./LogIn.jsp?LogInFailed");
-            //request.getRequestDispatcher("/LogIn.jsp").forward(request, 
-                    //response);
         }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
-        processRequest(request, response);
     }
 
     /**

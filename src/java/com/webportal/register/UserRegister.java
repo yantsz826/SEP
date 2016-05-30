@@ -5,10 +5,13 @@
  */
 package com.webportal.register;
 
+import com.webportal.models.AESCrypt;
 import com.webportal.util.ConnOracleUtility;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -37,15 +40,17 @@ public class UserRegister {
     
     
     
-    public boolean registUser(String vendorID, String pwd, String re_pwd, String email) throws SQLException {
+    public boolean registUser(String vendorID, String re_pwd, String email) throws SQLException, ParseException, Exception {
         boolean regist = false;      
         
-        if(identifyVendorID(vendorID) == true & identifyPwd(pwd, re_pwd) == true & identifyEmail(email) == true)
+        //identifyPwd to identify vendor_ID & tem-pwd user given for validating the user account
+        if(identifyVendorID(vendorID) == true && identifyEmail(email) == true)
         {
             try {
                 conn.getConnection();
                 stmt = this.conn.getConnection().createStatement();
-                String sql = "UPDATE USERTABLE SET PWD='" + re_pwd + "'" + ",EMAIL='" + email + "'" + "where SUPPLER_ACCOUNT='" + vendorID + "'";   // need to change table name and fields
+                re_pwd = AESCrypt.encrypt(re_pwd);
+                String sql = "update FINANCE_WEB_USERS set USERPASSWORD='" + re_pwd + "'" + ", EMAILADDR='" + email + "'" + ", OUTDATE=" + "null" + " where VENDORNO='" + vendorID + "'";   // need to change table name and fields
                 if(stmt.executeUpdate(sql) > 0) {
                     regist = true;
                 }      
@@ -69,30 +74,22 @@ public class UserRegister {
     
     
     
-    public boolean identifyVendorID(String vendorID) throws SQLException {
+    private boolean identifyVendorID(String vendorID) throws SQLException {
         boolean pass = false;
   
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select SUPPLER_ACCOUNT from user where SUPPLER_ACCOUNT='" + vendorID + "'";   //
+            String sql = "select VENDORNO from FINANCE_WEB_USERS where VENDORNO='" + vendorID + "'";   //
             rs = stmt.executeQuery(sql);
 
             while(rs.next()) 
             {
-                if(rs.getString("SUPPLER_ACCOUNT") != null)     //
-                {
-                    pass = true;
-                }
+                pass = vendorID.equals(rs.getString("VENDORNO"));
             } 
         } 
         catch (SQLException e) {
             throw e;
-        }
-        finally 
-        {
-            rs.close();
-            stmt.close();
         }
                    
         return pass;
@@ -100,22 +97,39 @@ public class UserRegister {
     
     
     
-    
-    public boolean identifyPwd(String pwd, String re_pwd) {
+    //only for register
+    public boolean identifyPwd(String vendorID, String tmp_password, String regist_message) throws SQLException, ParseException, Exception {
         boolean pass = false;
         
-        if(pwd.equals(re_pwd) == true) 
-        {
-            pass = true;
-        }
-        
+        try {
+            conn.getConnection();
+            stmt = this.conn.getConnection().createStatement();
+            tmp_password = AESCrypt.encrypt(tmp_password);
+            String sql = "select OUTDATE from FINANCE_WEB_USERS where VENDORNO='" + vendorID + "'" + "and USERPASSWORD='" + tmp_password + "'";   //
+            rs = stmt.executeQuery(sql);
+
+            while(rs.next()) 
+            {
+                //SimpleDateFormat sf = new SimpleDateFormat("dd-MMM-yyyy");
+                if(rs.getString("OUTDATE") != null)     //
+                {
+                    Date date = new Date();
+                    Date expiredDate = rs.getDate("OUTDATE");
+                    //pass = date.after(expiredDate);
+                    pass = date.before(expiredDate);
+                }
+            } 
+        } 
+        catch (SQLException e) {
+            throw e;
+        }         
+
         return pass;
     }
     
     
     
-    
-    public boolean identifyEmail(String email) {
+    private boolean identifyEmail(String email) {
         boolean pass = false;
         
         pattern = Pattern.compile(EMAIL_PATTERN);
