@@ -94,38 +94,7 @@ public class UserRegister {
                    
         return pass;
     }
-    
-    
-    
-    //only for register
-    public boolean identifyPwd(String vendorID, String tmp_password, String regist_message) throws SQLException, ParseException, Exception {
-        boolean pass = false;
-        
-        try {
-            conn.getConnection();
-            stmt = this.conn.getConnection().createStatement();
-            tmp_password = AESCrypt.encrypt(tmp_password);
-            String sql = "select OUTDATE from FINANCE_WEB_USERS where VENDORNO='" + vendorID + "'" + "and USERPASSWORD='" + tmp_password + "'";   //
-            rs = stmt.executeQuery(sql);
 
-            while(rs.next()) 
-            {
-                //SimpleDateFormat sf = new SimpleDateFormat("dd-MMM-yyyy");
-                if(rs.getString("OUTDATE") != null)     //
-                {
-                    Date date = new Date();
-                    Date expiredDate = rs.getDate("OUTDATE");
-                    //pass = date.after(expiredDate);
-                    pass = date.before(expiredDate);
-                }
-            } 
-        } 
-        catch (SQLException e) {
-            throw e;
-        }         
-
-        return pass;
-    }
     
     
     
