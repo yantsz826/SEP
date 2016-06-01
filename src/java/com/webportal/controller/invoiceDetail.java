@@ -74,13 +74,14 @@ public class invoiceDetail extends HttpServlet {
             statement = connection.createStatement();
             // sql query to retrieve values from the secified table.
             /*String reference = (String)request.getAttribute("attributeName");*/
-            Date temp1,temp2;
+            Date temp1;
+            Date temp2 = new Date();
             request.setAttribute("COLOR", false);
             String reference = session.getAttribute("invoiceReference").toString();
             DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.ENGLISH);
             String QueryString = "SELECT REFERENCE, DOCUMENT_DATE, AMOUNT, OUTSTANDING_AMOUNT,ALLOCATED_AMOUNT,DOCUMENT_TYPE,NARRATION1,NARRATION2,NARRATION3, STATUS, STAGE, APPROVAL_POOL, DUE_DATE, CODE, AREA, CONTACT  from WEBPORTAL, CONTACTS WHERE CODE = APPROVAL_POOL AND REFERENCE = ? ";
-                        PreparedStatement pstmt = connection.prepareStatement( QueryString );
-                        pstmt.setString( 1, reference); 
+            PreparedStatement pstmt = connection.prepareStatement( QueryString );
+            pstmt.setString( 1, reference); 
             rs = pstmt.executeQuery();
             rs.next();
             request.setAttribute("REFERENCE", rs.getString(1));
@@ -96,11 +97,14 @@ public class invoiceDetail extends HttpServlet {
             request.setAttribute("STAGE", rs.getString(11));
             request.setAttribute("APPROVAL_POOL", rs.getString(12));
             request.setAttribute("DUE_DATE", rs.getString(13));
-            temp1 = format.parse(rs.getString(2)); 
-            temp2 = format.parse(rs.getString(13)); 
-            if(temp1.compareTo(temp2) >= 0)
+            /*compare the due date is it after current date*/
+            if(rs.getString(13) != null)
             {
-                request.setAttribute("COLOR", true);
+                temp1 = format.parse(rs.getString(13)); 
+                if(temp1.compareTo(temp2) < 0)
+                {
+                    request.setAttribute("COLOR", true);
+                }
             }
             request.setAttribute("AREA", rs.getString(15));
             request.setAttribute("CONTACT", rs.getString(16));

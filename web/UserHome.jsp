@@ -54,7 +54,7 @@
                 $('#logoutLink').click(function () {
                     logout();
                 });
-                $('#invoiceList tbody tr').click(function () {
+                $('#invoiceList').on("click", "tbody tr", function () {
                     if ( $(this).hasClass('selected') ) {
                         $(this).removeClass('selected');
                     }

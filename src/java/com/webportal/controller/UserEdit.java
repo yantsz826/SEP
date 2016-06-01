@@ -198,9 +198,20 @@ public class UserEdit extends HttpServlet
                 if(pf.identifyUser(userID))
                 {
                     //email content
-                    String message = "This is your temporary passoword " + pwd
-                            + " for your account " + userID + "\nPlease note the temporary password is only avaiable before " + dateString + "." +
-                             "\n\nBest Regards, Curtin University";
+                    String message = "Dear user, \n\n" +
+                        "A password reset has been requested for the account " +
+                        "registered to this email address on the Curtin " + 
+                        "Finance Vendor Portal.\n\n" +
+                        "If you have not requested this, please contact " +
+                        "Curtin Finance on (08) 1234 5678.\n\n" + 
+                        "If you have requested this, you can now log in to " +
+                        "the Vendor Portal (https://finance.curtin.edu.au/VendorPortal) " +
+                        "using the temporary password below. This password " +
+                        "will be valid for 24 hours before you will need " +
+                        "to request a new one.\n\n" +
+                        "Temporary Password: " + pwd +"\n\n" +
+                        "Regards,\n" +
+                        "Curtin Finance";
                     //get user email
                     System.out.println(dateString);
                     String toEmail = pf.getRegisteredEmail(userID);
@@ -264,9 +275,20 @@ public class UserEdit extends HttpServlet
                         curDay.add(curDay.DAY_OF_MONTH,1);
                         String dateString = new SimpleDateFormat("dd-MM-YYYY").format(curDay.getTime()); 
                         //email content
-                        String message = "This is your temporary passoword " + pwd
-                                + " for your account " + newUserID + "\nPlease note the temporary password is only avaiable before " + dateString + "." +
-                                 "\n\nBest Regards, Curtin University";
+                        String message = "Dear user, \n\n" +
+                        "A password reset has been requested for the account " +
+                        "registered to this email address on the Curtin " + 
+                        "Finance Vendor Portal.\n\n" +
+                        "If you have not requested this, please contact " +
+                        "Curtin Finance on (08) 1234 5678.\n\n" + 
+                        "If you have requested this, you can now log in to " +
+                        "the Vendor Portal (https://finance.curtin.edu.au/VendorPortal) " +
+                        "using the temporary password below. This password " +
+                        "will be valid for 24 hours before you will need " +
+                        "to request a new one.\n\n" +
+                        "Temporary Password: " + pwd +"\n\n" +
+                        "Regards,\n" +
+                        "Curtin Finance";
                         //get user email
                         System.out.println(dateString);
                         String toEmail = pf.getRegisteredEmail(newUserID);
