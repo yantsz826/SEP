@@ -2,7 +2,7 @@
 Author: Nicholas Lawrence
 Student: 17075930
 Last edited: 30/05/2016
-Purpose: GET & POST for user Log In
+Purpose: GET & POST for user home page
  */
 package com.webportal;
 
