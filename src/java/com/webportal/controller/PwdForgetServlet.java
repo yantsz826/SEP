@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.webportal.controller;
 
 import com.webportal.models.AESCrypt;
@@ -29,7 +24,7 @@ public class PwdForgetServlet extends HttpServlet {
     
     private ConnOracleUtility cm = null;
     private final String host = "smtp.gmail.com";             //gmail host for testing  "smtp.gmail.com"
-    private final String port = "465";            //port for testing   "465", for TLS/STARTTLS 587
+    private final String port = "587";            //for TLS/STARTTLS 587
     
     //any mail account -> sender
     private final String username = "sep13test@gmail.com";   //sender email
@@ -53,18 +48,8 @@ public class PwdForgetServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        /**
-         *  judge if it submitted before, so we need have token at previous page
-         *  create token, and set token like request.getSession().setAttribute("token", token);
-         *  String token = TokenProccessor.getInstance().makeToken();
-         *  
-         */
-        boolean bo = isRepeatSubmit(request);
-        if(bo != true) {
-            request.getSession().removeAttribute("token");
-        }      
+            throws ServletException, IOException {        
+            
 
         String vendorID = request.getParameter("vendorID");
         //error message to pwd reset page
@@ -80,7 +65,7 @@ public class PwdForgetServlet extends HttpServlet {
         try {
             if(pf.identifyUser(vendorID) == true) {
                 String dateString;   
-                //get outdate； field3 -> week
+                //get outdate； field5 -> day
                 dateString = pf.getOutDate(field5, 1);
                 //email content
                 String pwd = pf.pwdGenerator();
@@ -129,28 +114,6 @@ public class PwdForgetServlet extends HttpServlet {
         }
     }
 
-
-    
-    private boolean isRepeatSubmit(HttpServletRequest request) {
-        String client_token = request.getParameter("token");
-
-        if(client_token==null){
-            return true;
-        }
-
-        String server_token = (String) request.getSession().getAttribute("token");
-
-        if(server_token==null){
-            return true;
-        }
-
-        if(!client_token.equals(server_token)){
-            return true;
-        }
-
-        return false;
-    }    
-    
     
     
     /**

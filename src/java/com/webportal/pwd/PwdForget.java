@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.webportal.pwd;
 
 import java.sql.*;
@@ -68,12 +63,10 @@ public class PwdForget {
     public void sendUserEmail(EmailEntry eentry) throws MessagingException {
                   
         Properties props = new Properties();
-        props.put("mail.smtp.host", eentry.getHost()); //SMTP Host
-        props.put("mail.smtp.socketFactory.port", eentry.getPort()); //SSL Port
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
-        props.put("mail.smtp.auth", "true"); //Enabling SMTP Authentication
-        props.put("mail.smtp.port", eentry.getPort()); //SMTP Port
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", eentry.getHost());  //
+        props.put("mail.smtp.port", eentry.getPort());  //587
 
 
         Authenticator auth = new Authenticator() {
