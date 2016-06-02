@@ -15,51 +15,48 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="css/style.css" type="text/css">
         <link rel="stylesheet" href="css/register.css" type="text/css">
-        <script type="text/javascript">
+        <script language=javascript>
             
-            function clear() {
-                document.getElementById("a").value = "";
-                document.getElementById("b").value = "";
-                document.getElementById("c").value = "";
-                document.getElementById("d").value = "";
-                document.getElementById("e").value = "";
-            }
-            
-            function check() {
-                var pwd1 = document.getElementById("c");
-                var pwd2 = document.getElementById("d");
-                if(pwd1.value != pwd2.value) {
-                    alert("password wrong");
-                    document.getElementById("d").value = "";
-
-                    return false;
-                }
-            }
-                      
             function pwdStandard() {
                 var letter = 0;
                 var Bletter = 0;
                 var number = 0;
                 var count = 0;
-                var pwd = document.getElementById("c").value;
+                var pwd = document.getElementById("b").value;
                 var len = pwd.length;
+
                 for(var i = 0; i < len; i++) {
-                    if(pwd[i] >= 48 && pwd[i] <=57)
+                    
+                    if(pwd.charCodeAt(i) >= 48 && pwd.charCodeAt(i) <= 57)
                         number++;
-                        console.log(number);
-                    if(pwd[i] >= 65 && pwd[i] <= 90)
+
+                    if(pwd.charCodeAt(i) >= 65 && pwd.charCodeAt(i) <= 90)
                         Bletter++;
-                    if(pwd[i] >= 97 && pwd[i] <= 122)
+
+                    if(pwd.charCodeAt(i) >= 97 && pwd.charCodeAt(i) <= 122)
                         letter++;
+                    
                     count++; 
                 }              
                 
-                if(Bletter < 1 && count < 8 && number < 2) {
+                if(Bletter < 1 || count < 8 || number < 2) {
                     alert("Note:  Password must at least 8 characters long, and at least one capital letters and two numbers");
+                    document.getElementById("b").value = "";
+
+                    return false;
+                }  
+            }
+                
+            
+            function check() {
+                var pwd1 = document.getElementById("b");
+                var pwd2 = document.getElementById("c");
+                if(pwd1.value != pwd2.value) {
+                    alert("Password does not match the Re-password.");
                     document.getElementById("c").value = "";
 
                     return false;
-                }                     
+                }
             }
             
             </script>
@@ -90,21 +87,13 @@
                         <td class="r_right">
                             <input id="a" type="text" name="vendorID" class="txt" />
                         </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <label>Temporary Password: </label>
-                        </th>
-                        <td>
-                            <input id="b" type="password" name="tmp_password" class="txt"/>
-                        </td>
-                    </tr>                    
+                    </tr>                   
                     <tr>
                         <th>
                             <label>New Password: </label>
                         </th>
                         <td>
-                            <input id="c" type="password" name="password" class="txt" onchange="pwdStandard()"/>
+                            <input id="b" type="password" name="password" class="txt" onchange="pwdStandard()"/>
                         </td>
                     </tr>
                     <tr>
@@ -112,7 +101,7 @@
                             <label>Re-password: </label>
                         </th>
                         <td>
-                            <input id="d" type="password" name="re_password" class="txt" onchange="check()"/>
+                            <input id="c" type="password" name="re_password" class="txt" onchange="check()"/>
                         </td>
                     </tr> 
                     <tr>
@@ -121,7 +110,7 @@
                             
                         </th>
                         <td>
-                            <input id="e" type="text" name="email" class="txt" />
+                            <input id="d" type="text" name="email" class="txt" />
                         </td>
                     </tr> 
                     </br>

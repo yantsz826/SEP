@@ -3,26 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.util;
+package com.webportal.util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  *
  * @author Chen
  */
-public class ConnOracleUtility {
+public class ConnMysqlUtility {
     
     //mysql for testing
-    private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";     //driver
-    private static final String URL = "";  //jdbc:oracle:thin:@//localhost:1521/XE
-    private static final String USER = "SYSTEM";    //admin
-    private static final String PWD = "";   //pwd for Oracle 
+    private static final String DRIVER = "com.mysql.jdbc.Driver"; 
+    private static final String URL = "jdbc:mysql://localhost:3306/samp_db";
+    private static final String USER = "root";
+    private static final String PWD = "Seven1206";
     private Connection conn = null;
     
-    public ConnOracleUtility() throws Exception {
+    public ConnMysqlUtility() throws Exception {
         try {
             Class.forName(DRIVER);
             this.conn = DriverManager.getConnection(URL, USER, PWD);
@@ -45,5 +43,5 @@ public class ConnOracleUtility {
                 throw e;
             }
         }
-    }        
+    }     
 }

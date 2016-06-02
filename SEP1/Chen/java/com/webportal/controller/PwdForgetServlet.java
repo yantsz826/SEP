@@ -1,6 +1,6 @@
-package com.controller;
+package com.webportal.controller;
 
-import com.pwd.EmailEntry;
+import com.webportal.pwd.EmailEntry;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -11,8 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.pwd.PwdForget;
-import com.util.ConnOracleUtility;
+import com.webportal.pwd.PwdForget;
+import com.webportal.util.ConnOracleUtility;
 
 /**
  *

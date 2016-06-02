@@ -1,11 +1,10 @@
-package com.register;
+ package com.webportal.register;
 
-import com.util.ConnOracleUtility;
+import com.webportal.util.ConnOracleUtility;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -31,8 +30,7 @@ public class UserRegister {
     public UserRegister(ConnOracleUtility conn) {
         this.conn = conn;
     }
-    
-    
+
     
     public boolean registUser(String vendorID, String re_pwd, String email) throws SQLException, ParseException {
         boolean regist = false;      
@@ -43,7 +41,7 @@ public class UserRegister {
             try {
                 conn.getConnection();
                 stmt = this.conn.getConnection().createStatement();
-                String sql = "update FINANCE_WEB_USERS set USERPASSWORD='" + re_pwd + "'" + ", EMAILADDR='" + email + "'" + ", OUTDATE" + "null" + " where VENDORNO='" + vendorID + "'";   // need to change table name and fields
+                String sql = "update user set pwd='" + re_pwd + "'" + ", email='" + email + "'" + ", out_date=" + "null" + " where vendorID='" + vendorID + "'"; 
                 if(stmt.executeUpdate(sql) > 0) {
                     regist = true;
                 }      
@@ -73,50 +71,18 @@ public class UserRegister {
         try {
             conn.getConnection();
             stmt = this.conn.getConnection().createStatement();
-            String sql = "select VENDORNO from FINANCE_WEB_USERS where VENDORNO='" + vendorID + "'";
+            String sql = "select vendorID from user where vendorID='" + vendorID + "'"; 
             rs = stmt.executeQuery(sql);
 
             while(rs.next()) 
             {
-                pass = vendorID.equals(rs.getString("VENDORNO"));
+                pass = vendorID.equals(rs.getString("vendorID"));
             } 
         } 
         catch (SQLException e) {
             throw e;
         }
                    
-        return pass;
-    }
-    
-    
-    
-    //only for register
-    public boolean identifyPwd(String vendorID, String tmp_password, String regist_message) throws SQLException, ParseException {
-        boolean pass = false;
-        
-        try {
-            conn.getConnection();
-            stmt = this.conn.getConnection().createStatement();
-            String sql = "select OUTDATE from FINANCE_WEB_USERS where VENDORNO='" + vendorID + "'" + "and USERPASSWORD='" + tmp_password + "'";   //
-            rs = stmt.executeQuery(sql);
-
-            while(rs.next()) 
-            {
-                //SimpleDateFormat sf = new SimpleDateFormat("dd-MMM-yyyy");
-                if(rs.getString("OUTDATE") != null)     //
-                {
-                    Date date = new Date();
-                    Date expiredDate = rs.getDate("OUTDATE");
-                    //pass = date.after(expiredDate);
-                    pass = date.before(expiredDate);
-                }
-                
-            } 
-        } 
-        catch (SQLException e) {
-            throw e;
-        }         
-
         return pass;
     }
     

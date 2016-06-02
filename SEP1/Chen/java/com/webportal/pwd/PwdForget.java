@@ -1,4 +1,4 @@
-package com.pwd;
+package com.webportal.pwd;
 
 import java.sql.*;
 import java.util.*;
@@ -9,7 +9,7 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.*;
-import com.util.ConnOracleUtility;
+import com.webportal.util.ConnOracleUtility;
 import javax.mail.Authenticator;
 import javax.mail.MessagingException;
 
