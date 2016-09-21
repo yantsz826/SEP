@@ -1,0 +1,73 @@
+@{
+    ViewBag.Title = "InvoiceDetail";
+}
+
+<h2>InvoInvoiceDetail</h2>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Document File Name : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.docFileName</div>
+</div>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Document Date : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.document_Date</div>
+</div>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Document Type : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.docement_Type</div>
+</div>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Narration1 : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.narration1</div>
+</div>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Narration2 : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.narration2</div>
+</div>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Narration3 : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.narration3</div>
+</div>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Status : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.status</div>
+</div>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Stage : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.stage</div>
+</div>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Approval pool : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.approvel_Pool</div>
+</div>
+@if (ViewBag.color)
+{
+    <text><div class="row" style="background-color:#F8FC95; color:red; padding:10px;">
+    </text>
+}
+else
+{
+    <text><div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    </text>
+}
+<div class="col-xs-6 col-md-4">Due date  : </div>
+<div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.due_Date</div>
+</div>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Area  : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.Area</div>
+</div>
+<div class="row" style="background-color:#F8FC95; color:black; padding:10px;">
+    <div class="col-xs-6 col-md-4">Contact  : </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">@ViewBag.Contact</div>
+</div>
+
+
+<table>
+    <tr>
+        <td>
+            <form action="~/Home/UserEdit\" method="get">
+                <button type="submit">&#60;-- back</button>
+            </form>
+        </td>
+    </tr>
+</table>
