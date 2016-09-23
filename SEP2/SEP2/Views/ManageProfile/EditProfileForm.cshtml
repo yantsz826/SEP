@@ -1,0 +1,75 @@
+﻿@model MvcApplication1.Models.Profile
+
+@{
+    ViewBag.Title = "EditProfileForm";
+}
+
+<link rel="stylesheet" href="~/css/register.css" type="text/css">
+
+<div class="register_head">
+</div>
+<div class="register_formWrap">
+    <div class="register_title">
+        <span>
+            <h1>EditProfile Form</h1>
+        </span>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        @Html.AntiForgeryToken()
+        <div>
+            @if (ViewBag.Message != null)
+            {
+                <span>
+                    <font style="color:@ViewData["color"]"> @ViewBag.Message </font>
+                </span>
+            }
+        </div>
+        <table class="register_table">
+            <tr>
+                <th class="r_left">
+                    @Html.LabelFor(model => model.VendorID):
+                </th>
+                <td class="r_right">
+                    @Html.TextBoxFor(model => model.VendorID, new { @class="txt"})
+                    @Html.ValidationMessageFor(model => model.VendorID)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.Password):
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.Password, new { @class = "txt" })
+                    @Html.ValidationMessageFor(model => model.Password)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.RePassword):&nbsp;&nbsp;
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.RePassword, new { @class = "txt" })
+                    @Html.ValidationMessageFor(model => model.RePassword)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.Email):
+                </th>
+                <td>
+                    @Html.TextBoxFor(model => model.Email, new { @class = "txt" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span class="half_box left"><input class="btn" type="submit" value="Cancel" onclick="history.back(-1)"></span>
+                    <span class="half_box right"> <input class="btn" type="submit" value="Submit >"></span>
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+
