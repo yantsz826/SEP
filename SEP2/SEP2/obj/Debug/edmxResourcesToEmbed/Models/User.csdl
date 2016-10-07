@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SEPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="FINANCE_WEB_USERS">
+    <Key>
+      <PropertyRef Name="VENDORNO" />
+    </Key>
+    <Property Name="VENDORNO" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="EMAILADDR" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="ADMINUSER" Type="Boolean" />
+    <Property Name="OUTDATE" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityContainer Name="SEPEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="FINANCE_WEB_USERS" EntityType="Self.FINANCE_WEB_USERS" />
+  </EntityContainer>
+</Schema>

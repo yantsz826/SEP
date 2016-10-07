@@ -1,53 +1,65 @@
-﻿using System;
-using MvcApplication1.Models;
+﻿using SEP2.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MvcApplication1.Controllers
+namespace SEP2.Controllers
 {
     public class ManageProfileController : Controller
     {
         //
         // GET: /ManageProfile/
 
-        public ActionResult EditProfileForm() 
+        public ActionResult EditProfileForm()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditProfileForm(Profile pf) 
+        public ActionResult EditProfileForm(FINANCE_WEB_USERS pf)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                using (UserEntities ue = new UserEntities()) 
+                using (SEPEntities ue = new SEPEntities())
                 {
                     try
                     {
-                        var newProfile = ue.Profiles.Find(pf.VendorID);
+                        var newProfile = ue.FINANCE_WEB_USERS.Find(pf.VENDORNO);
 
-                        if (TryUpdateModel(newProfile, "", new string[] { "Password", "RePassword", "Email"}))
+                        if (TryUpdateModel(newProfile, "", new string[] { "Password", "RePassword", "Email" }))
                         {
-                            try
+                            if(VerifyPWD(pf.PASSWORD))
+                            {   
+                                try
+                                {
+                                    ue.SaveChanges();
+                                    ModelState.Clear();
+                                    pf = null;
+                                    ViewBag.Message = "Successfully saved new profiles. ";
+                                    ViewData["color"] = "green";
+                                }
+                                catch (Exception ex)
+                                {
+                                    ViewBag.Message = "Unable to save this new profile, please contact the administrator! ";
+                                    ViewData["color"] = "red";
+                                    return View(pf);
+                                }
+                            }
+                            else 
                             {
-                                ue.SaveChanges();
                                 ModelState.Clear();
                                 pf = null;
-                                ViewBag.Message = "Successfully saved new profiles. ";
-                                ViewData["color"] = "green";
-                            }
-                            catch (Exception ex)
-                            {
-                                ViewBag.Message = "Unable to save this new profile, please contact the administrator ! ";
+                                ViewBag.Message = "Password does not meet the Curtin pwd standard! ";
                                 ViewData["color"] = "red";
                                 return View(pf);
                             }
+
                         }
                     }
-                    catch (ArgumentNullException) 
+                    catch (ArgumentNullException)
                     {
                         ModelState.Clear();
                         pf = null;
@@ -60,9 +72,10 @@ namespace MvcApplication1.Controllers
             return View(pf);
         }
 
-        //Verify pwd in right formate [a-z] [A-Z] [0-9] && 8-12 length && 2 upcase-letter and 1 number at least
+        //Verify pwd in right formate [a-z] [A-Z] [0-9] && 8-12 length && 1 upcase-letter and 2 number at least
         private Boolean VerifyPWD(string tempPwd)
         {
+            Console.Write(tempPwd);
             Boolean pass = false;
             int letterUp = 0;
             int number = 0;
@@ -76,15 +89,20 @@ namespace MvcApplication1.Controllers
                     char c = tempPwd[i];
                     if (char.IsUpper(c))
                     {
+                        Console.Write(letterUp);
                         letterUp++;
+                        Console.Write(letterUp);
                     }
                     else if (char.IsDigit(c))
                     {
+                        Console.Write(number);
                         number++;
+                        Console.Write(letterUp);
                     }
                 }
             }
-
+            Console.Write(letterUp);
+            Console.Write(number);
             if (letterUp >= 1 && number >= 2)
             {
                 pass = true;
@@ -92,5 +110,6 @@ namespace MvcApplication1.Controllers
 
             return pass;
         }
+
     }
 }

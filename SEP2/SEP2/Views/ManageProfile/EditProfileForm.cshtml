@@ -1,7 +1,7 @@
-﻿@model MvcApplication1.Models.Profile
+﻿@model SEP2.Models.FINANCE_WEB_USERS
 
 @{
-    ViewBag.Title = "EditProfileForm";
+    ViewBag.Title = "EditProfile Form";
 }
 
 <link rel="stylesheet" href="~/css/register.css" type="text/css">
@@ -11,7 +11,7 @@
 <div class="register_formWrap">
     <div class="register_title">
         <span>
-            <h1>EditProfile Form</h1>
+            <h1>Edit Profile Form</h1>
         </span>
     </div>
     @using (Html.BeginForm())
@@ -29,38 +29,38 @@
         <table class="register_table">
             <tr>
                 <th class="r_left">
-                    @Html.LabelFor(model => model.VendorID):
+                    @Html.LabelFor(model => model.VENDORNO):
                 </th>
                 <td class="r_right">
-                    @Html.TextBoxFor(model => model.VendorID, new { @class="txt"})
-                    @Html.ValidationMessageFor(model => model.VendorID)
+                    @Html.TextBoxFor(model => model.VENDORNO, new { @class = "txt" })
+                    @Html.ValidationMessageFor(model => model.VENDORNO)
                 </td>
             </tr>
             <tr>
                 <th>
-                    @Html.LabelFor(model => model.Password):
+                    @Html.LabelFor(model => model.PASSWORD):
                 </th>
                 <td>
-                    @Html.TextBoxFor(model => model.Password, new { @class = "txt" })
-                    @Html.ValidationMessageFor(model => model.Password)
+                    @Html.PasswordFor(model => model.PASSWORD, new { @class = "txt" })
+                    @Html.ValidationMessageFor(model => model.PASSWORD)
                 </td>
             </tr>
             <tr>
                 <th>
-                    @Html.LabelFor(model => model.RePassword):&nbsp;&nbsp;
+                    @Html.LabelFor(model => model.REPASSWORD):&nbsp;&nbsp;
                 </th>
                 <td>
-                    @Html.TextBoxFor(model => model.RePassword, new { @class = "txt" })
-                    @Html.ValidationMessageFor(model => model.RePassword)
+                    @Html.PasswordFor(model => model.REPASSWORD, new { @class = "txt" })
+                    @Html.ValidationMessageFor(model => model.REPASSWORD)
                 </td>
             </tr>
             <tr>
                 <th>
-                    @Html.LabelFor(model => model.Email):
+                    @Html.LabelFor(model => model.EMAILADDR):
                 </th>
                 <td>
-                    @Html.TextBoxFor(model => model.Email, new { @class = "txt" })
-                    @Html.ValidationMessageFor(model => model.Email)
+                    @Html.TextBoxFor(model => model.EMAILADDR, new { @class = "txt" })
+                    @Html.ValidationMessageFor(model => model.EMAILADDR)
                 </td>
             </tr>
             <tr>
@@ -72,4 +72,3 @@
         </table>
     }
 </div>
-

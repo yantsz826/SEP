@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "ForgotPWD";
+}
+
+<link rel="stylesheet" href="~/css/reset.css" type="text/css">
+
+<div class="reset_head">
+</div>
+<div class="reset_formWrap">
+    <div class="register_title">
+        <span>
+            <h1>Password Reset</h1>
+        </span>
+    </div>
+    @using (Html.BeginForm("ResetAndEmail", "ResetPWD", FormMethod.Post))
+    {
+        <div>
+            @if (ViewBag.Message != null)
+            {
+                <span>
+                    <font style="color:@ViewData["color"]"> @ViewBag.Message </font>
+                </span>
+            }
+        </div>
+        <table class="reset_table">
+            <tr>
+                <th class="r_left">
+                    @Html.Label("VendorID: ")
+                </th>
+                <td class="r_right">
+                    @Html.TextBox("VendorID", null, new { @class = "txt" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span class="half_box left"><input class="btn" type="submit" value="Cancel" onclick=""></span>
+                    <span class="half_box right"> <input class="btn" type="submit" value="Next >>"></span>
+                </td>
+            </tr>
+        </table>
+    }
+</div>
