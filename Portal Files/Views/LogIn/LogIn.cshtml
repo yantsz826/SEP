@@ -1,0 +1,69 @@
+﻿<!--
+    Document: LogIn View
+    Created On: 11/10/2016
+    Author: Nicholas Lawrence
+    Student: 17075930
+-->
+@model Finance_Vendor_Portal.Models.FINANCE_WEB_USERS
+@{
+    ViewBag.Title = "Login Page";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>LogIn</title>
+    <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="~/Scripts/jquery-1.7.min.js"></script>
+    <script src="@Url.Content("~/Scripts/LogIn.js")"></script>
+</head>
+<body>
+    <div id="loginPage">
+        <div>
+            <p id="loginTitle">
+                Finance Vendor Portal
+            </p>
+        </div>
+        <p id="vendorDesc">You need to log in to access this area. Please supply your Curtin network credentials</p>
+        <div id="logincontainer">
+            @using (Html.BeginForm())
+            {
+                @Html.ValidationSummary(true, "Login failed. Check your login details.");
+                <fieldset>
+                    <div id="editFields">
+                        <div id="userField">
+                            <div class="editor-label">
+                                @Html.DisplayNameFor(model => model.VENDOR_NUMBER)
+                            </div>
+                            <div class="editor-field">
+                                @Html.EditorFor(model => model.VENDOR_NUMBER)
+                            </div>
+                        </div>
+                        <div id="passwordField">
+                            <div class="editor-label">
+                                @Html.DisplayNameFor(model => model.USER_PASSWORD)
+                            </div>
+                            <div class="editor-field">
+                                @Html.PasswordFor(model => model.USER_PASSWORD)
+                            </div>
+                        </div>
+                        <div>
+                            <p>@ViewBag.LoginMsg</p>
+                        </div>
+                    </div>
+                    <div id="btnField">
+                        <div id="logInBtn">
+                            <input type="submit" value="Log In" class="subBtn" />
+                        </div>
+                        <div id="forgotPwdBtn">
+                            <button id="forgotpwdbtn" class="subBtn" type="button">Forgot Your Password?</button>
+                        </div>
+                    </div>
+                </fieldset>
+            }
+        </div>
+    </div>
+</body>
+</html>

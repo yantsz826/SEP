@@ -1,0 +1,166 @@
+﻿/*Desktop Responsive*/
+@media
+only screen and
+(min-width: 1025px) {
+    #loginTitle, .portalTitle {
+        color:#956f00;
+        font-size:24px;
+        font-weight:bold;
+    }
+    .pageTitle {
+        color:#956f00;
+        font-size:20px;
+        font-weight:bold;
+    }
+    .editor-label, .editor-field, .subBtn {
+        float:left;
+        display:block;
+        font-size:18px;
+        margin-right:10px;
+    }
+    .editor-label, .editor-field {
+        text-align:right;
+        margin:8px;
+    }
+    .hideableCol {
+        display: table-cell;
+    }
+    #invoiceList tbody td {
+        font-size:13px;
+    }
+    #invoiceList thead th {
+        font-size:15px;
+    }
+}
+/*Tablet Responsive*/
+@media
+only screen and
+(min-width:768px) and (max-width:1024px) {
+    #loginTitle, .portalTitle {
+        color:#956f00;
+        font-size:24px;
+        font-weight:bold;
+    }
+    .pageTitle {
+        color:#956f00;
+        font-size:20px;
+        font-weight:bold;
+    }
+    .editor-label, .editor-field, .subBtn {
+        float:left;
+        display:block;
+        font-size:14px;
+        margin-right:10px;
+    }
+    .editor-label, .editor-field {
+        text-align:right;
+        margin:8px;
+    }
+    .hideableCol {
+        display: table-cell;
+    }
+    #invoiceList tbody td {
+        font-size:12px;
+    }
+    #invoiceList thead th {
+        font-size:14px;
+    }
+}
+/*Mobile Responsive*/
+@media only screen and (max-width:767px) {
+    #loginTitle, .portalTitle {
+        color: #956f00;
+        font-size:18px;
+        font-weight:bold;
+    }
+    .pageTitle {
+        color:#956f00;
+        font-size:20px;
+        font-weight:bold;
+    }
+    .editor-label, .editor-field, .subBtn {
+        float:left;
+        display:block;
+        font-size:11px;
+        margin-right:10px;
+    }
+    .editor-label, .editor-field {
+        text-align:right;
+        margin:8px;
+    }
+    .hideableCol {
+        display:none;
+    }
+    #invoiceList tbody td {
+        font-size:11px;
+    }
+    #invoiceList thead th {
+        font-size:13px;
+    }
+}
+.subBtn{
+    border: 1px solid #CCC;
+    color: #444;
+    border-radius:16px;
+    float:left;
+    padding:8px;
+    background-color: #f2f2f2;
+}
+.linkBtn {
+    border: 1px solid #CCC;
+    color: #444;
+    border-radius:10px;
+    background-color: #f2f2f2;
+    padding:8px;
+}
+.subBtn:hover, .linkBtn:hover {
+    background-color: #CCC;
+    cursor: pointer;
+}
+#editFields {
+    display:table-cell;
+}
+#logInBtn {
+    min-width:150px;
+}
+#forgotPwdBtn {
+    min-width:150px;
+}
+thead {
+    border:1px solid black;
+}
+#tableDIV {
+    text-align: center;
+}
+#invoiceList tr {
+    cursor: pointer;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           
+}
+#userMenu {
+    border-top: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+}
+#userMenu > ul li {
+    display:table-cell;
+}
+#userMenu > ul {
+    list-style-type:none;
+}
+#userMenu > ul > li > a {
+    margin-right:3px;
+    text-decoration: none;
+}
+#loginTitle {
+    border-bottom: 1px solid #CCC;
+}
+fieldset {
+    border: none;
+}
+.detailTxt {
+    padding-bottom:5px;
+    border-bottom: 1px solid #CCC;
+}

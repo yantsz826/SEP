@@ -1,0 +1,96 @@
+﻿<!--
+    Document: UserHome View
+    Created On: 11/10/2016
+    Author: Nicholas Lawrence
+    Student: 17075930
+-->
+@model IEnumerable<Finance_Vendor_Portal.Models.WEBPORTAL>
+<head>
+    <title>User Home</title>
+    <script type="text/javascript" src="~/Scripts/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.12/sorting/datetime-moment.js"></script>
+    <script src="@Url.Content("~/Scripts/UserHome.js")"></script>
+    <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.css">
+</head>
+<body>
+    <div>
+        <p class="portalTitle">
+            Finance Vendor Portal
+        </p>
+    </div>
+    <div id="userMenu">
+        <ul>
+            <li>
+                @Html.ActionLink("Manage Profile", "", null, new { @class = "linkBtn" })
+            </li>
+            @if (this.Request.Cookies["admin"] != null && 
+                this.Request.Cookies["admin"].Value == "true")
+            { 
+                <li>
+                    @Html.ActionLink("Edit User List", "", null, new { @class = "linkBtn" })
+                </li>
+            }
+            <li>
+                @Html.ActionLink("Log Out", "LogOut", "LogIn", null, new { @class = "linkBtn" })
+            </li>
+        </ul>
+    </div>
+    <div>
+        <p class="pageTitle">
+            User Home Page
+        </p>
+        <p class="detailTxt">
+            The table below summarises the basic information for all of your invoices. If the information you get from 
+            clicking the "Get Invoice Details" button is not enough, call Curtin Finance on (Phone Number) to get more detailed information.
+        </p>
+    </div>
+    @using (Html.BeginForm())
+    {
+        <div id="tableDIV">
+            <table id="invoiceList" class="display" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DOCUMENT_FILE_NAME)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DOCUMENT_DATE)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.STATUS)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NARRATION1)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DOCUMENT_FILE_NAME)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DOCUMENT_DATE)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.STATUS)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NARRATION1)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <input type="submit" value="Get Invoice Details" id="getDetailsBtn" class="subBtn"/>
+        </div>
+    }
+</body>
