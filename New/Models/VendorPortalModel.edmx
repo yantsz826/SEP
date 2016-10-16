@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="VendorPortalDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CONTACTS">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="varchar" MaxLength="7" Nullable="false" />
+          <Property Name="Area" Type="varchar" MaxLength="50" />
+          <Property Name="Contact" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="FINANCE_WEB_USERS">
+          <Key>
+            <PropertyRef Name="VENDORNO" />
+          </Key>
+          <Property Name="VENDORNO" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="PASSWORD" Type="varchar" MaxLength="50" />
+          <Property Name="EMAILADDR" Type="varchar" MaxLength="100" />
+          <Property Name="ADMINUSER" Type="bit" />
+          <Property Name="OUTDATE" Type="datetime" />
+        </EntityType>
+        <EntityType Name="WEBPORTAL">
+          <Key>
+            <PropertyRef Name="DOCUMENT_FILE_NAME" />
+          </Key>
+          <Property Name="ABN" Type="varchar" MaxLength="11" />
+          <Property Name="SUPPLIER_DESCRIPTION" Type="varchar" MaxLength="100" />
+          <Property Name="SUPPLIER_ACCOUNT" Type="varchar" MaxLength="30" />
+          <Property Name="REFERENCE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DOCUMENT_DATE" Type="datetime" />
+          <Property Name="DOCUMENT_TYPE" Type="varchar" MaxLength="50" />
+          <Property Name="NARRATION1" Type="varchar" MaxLength="100" />
+          <Property Name="NARRATION2" Type="varchar" MaxLength="100" />
+          <Property Name="NARRATION3" Type="varchar" MaxLength="100" />
+          <Property Name="STATUS" Type="varchar" MaxLength="1" />
+          <Property Name="STAGE" Type="varchar" MaxLength="50" />
+          <Property Name="APPROVAL_POOL" Type="varchar" MaxLength="20" />
+          <Property Name="DUE_DATE" Type="datetime" />
+          <Property Name="DOCUMENT_FILE_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="VendorPortalDataModelStoreContainer">
+          <EntitySet Name="CONTACTS" EntityType="Self.CONTACTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FINANCE_WEB_USERS" EntityType="Self.FINANCE_WEB_USERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WEBPORTAL" EntityType="Self.WEBPORTAL" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VendorPortalDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CONTACT">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Area" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contact1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="FINANCE_WEB_USERS">
+          <Key>
+            <PropertyRef Name="VENDORNO" />
+          </Key>
+          <Property Name="VENDORNO" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EMAILADDR" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ADMINUSER" Type="Boolean" />
+          <Property Name="OUTDATE" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="WEBPORTAL">
+          <Key>
+            <PropertyRef Name="DOCUMENT_FILE_NAME" />
+          </Key>
+          <Property Name="ABN" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="SUPPLIER_DESCRIPTION" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SUPPLIER_ACCOUNT" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="REFERENCE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DOCUMENT_DATE" Type="DateTime" Precision="3" />
+          <Property Name="DOCUMENT_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NARRATION1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NARRATION2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NARRATION3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="STATUS" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="STAGE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="APPROVAL_POOL" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DUE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="DOCUMENT_FILE_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="VendorPortalDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CONTACTS" EntityType="Self.CONTACT" />
+          <EntitySet Name="FINANCE_WEB_USERS" EntityType="Self.FINANCE_WEB_USERS" />
+          <EntitySet Name="WEBPORTALs" EntityType="Self.WEBPORTAL" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VendorPortalDataModelStoreContainer" CdmEntityContainer="VendorPortalDatabaseEntities">
+          <EntitySetMapping Name="CONTACTS">
+            <EntityTypeMapping TypeName="VendorPortalDataModel.CONTACT">
+              <MappingFragment StoreEntitySet="CONTACTS">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Contact1" ColumnName="Contact" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FINANCE_WEB_USERS">
+            <EntityTypeMapping TypeName="VendorPortalDataModel.FINANCE_WEB_USERS">
+              <MappingFragment StoreEntitySet="FINANCE_WEB_USERS">
+                <ScalarProperty Name="VENDORNO" ColumnName="VENDORNO" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="EMAILADDR" ColumnName="EMAILADDR" />
+                <ScalarProperty Name="ADMINUSER" ColumnName="ADMINUSER" />
+                <ScalarProperty Name="OUTDATE" ColumnName="OUTDATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WEBPORTALs">
+            <EntityTypeMapping TypeName="VendorPortalDataModel.WEBPORTAL">
+              <MappingFragment StoreEntitySet="WEBPORTAL">
+                <ScalarProperty Name="ABN" ColumnName="ABN" />
+                <ScalarProperty Name="SUPPLIER_DESCRIPTION" ColumnName="SUPPLIER_DESCRIPTION" />
+                <ScalarProperty Name="SUPPLIER_ACCOUNT" ColumnName="SUPPLIER_ACCOUNT" />
+                <ScalarProperty Name="REFERENCE" ColumnName="REFERENCE" />
+                <ScalarProperty Name="DOCUMENT_DATE" ColumnName="DOCUMENT_DATE" />
+                <ScalarProperty Name="DOCUMENT_TYPE" ColumnName="DOCUMENT_TYPE" />
+                <ScalarProperty Name="NARRATION1" ColumnName="NARRATION1" />
+                <ScalarProperty Name="NARRATION2" ColumnName="NARRATION2" />
+                <ScalarProperty Name="NARRATION3" ColumnName="NARRATION3" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="STAGE" ColumnName="STAGE" />
+                <ScalarProperty Name="APPROVAL_POOL" ColumnName="APPROVAL_POOL" />
+                <ScalarProperty Name="DUE_DATE" ColumnName="DUE_DATE" />
+                <ScalarProperty Name="DOCUMENT_FILE_NAME" ColumnName="DOCUMENT_FILE_NAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
