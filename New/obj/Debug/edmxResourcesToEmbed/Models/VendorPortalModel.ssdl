@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="VendorPortalDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="DatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="CONTACTS">
     <Key>
       <PropertyRef Name="Code" />
@@ -13,9 +13,9 @@
       <PropertyRef Name="VENDORNO" />
     </Key>
     <Property Name="VENDORNO" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="PASSWORD" Type="varchar" MaxLength="50" />
-    <Property Name="EMAILADDR" Type="varchar" MaxLength="100" />
-    <Property Name="ADMINUSER" Type="bit" />
+    <Property Name="PASSWORD" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="EMAILADDR" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="ADMINUSER" Type="bit" Nullable="false" />
     <Property Name="OUTDATE" Type="datetime" />
   </EntityType>
   <EntityType Name="WEBPORTAL">
@@ -37,7 +37,7 @@
     <Property Name="DUE_DATE" Type="datetime" />
     <Property Name="DOCUMENT_FILE_NAME" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
-  <EntityContainer Name="VendorPortalDataModelStoreContainer">
+  <EntityContainer Name="DatabaseModelStoreContainer">
     <EntitySet Name="CONTACTS" EntityType="Self.CONTACTS" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FINANCE_WEB_USERS" EntityType="Self.FINANCE_WEB_USERS" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="WEBPORTAL" EntityType="Self.WEBPORTAL" Schema="dbo" store:Type="Tables" />

@@ -7,20 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebPortal.Models
+namespace FinanceVendorPortal.Models
 {
     using System;
     using System.Collections.Generic;
     
     public partial class FINANCE_WEB_USERS
     {
-        private FINANCE_WEB_USERS newUser;
-        private string p1;
-        private string newEmail;
-        private bool p2;
-        private DateTime? nullable;
-
-        public FINANCE_WEB_USERS() :base()
+        public FINANCE_WEB_USERS() : base()
         {
 
         }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebPortal.Models
+namespace FinanceVendorPortal.Models
 {
     using System;
     using System.Data.Entity;

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="VendorPortalDataModelStoreContainer" CdmEntityContainer="VendorPortalDatabaseEntities">
+  <EntityContainerMapping StorageEntityContainer="DatabaseModelStoreContainer" CdmEntityContainer="VendorPortalDatabaseEntities">
     <EntitySetMapping Name="CONTACTS">
-      <EntityTypeMapping TypeName="VendorPortalDataModel.CONTACT">
+      <EntityTypeMapping TypeName="DatabaseModel.CONTACT">
         <MappingFragment StoreEntitySet="CONTACTS">
           <ScalarProperty Name="Code" ColumnName="Code" />
           <ScalarProperty Name="Area" ColumnName="Area" />
@@ -11,7 +11,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="FINANCE_WEB_USERS">
-      <EntityTypeMapping TypeName="VendorPortalDataModel.FINANCE_WEB_USERS">
+      <EntityTypeMapping TypeName="DatabaseModel.FINANCE_WEB_USERS">
         <MappingFragment StoreEntitySet="FINANCE_WEB_USERS">
           <ScalarProperty Name="VENDORNO" ColumnName="VENDORNO" />
           <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
@@ -22,7 +22,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="WEBPORTALs">
-      <EntityTypeMapping TypeName="VendorPortalDataModel.WEBPORTAL">
+      <EntityTypeMapping TypeName="DatabaseModel.WEBPORTAL">
         <MappingFragment StoreEntitySet="WEBPORTAL">
           <ScalarProperty Name="ABN" ColumnName="ABN" />
           <ScalarProperty Name="SUPPLIER_DESCRIPTION" ColumnName="SUPPLIER_DESCRIPTION" />

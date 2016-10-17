@@ -4,10 +4,10 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7aead55588ee49758a5be17cd19decfe" Name="Diagram1">
-        <EntityTypeShape EntityType="VendorPortalDataModel.CONTACT" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="VendorPortalDataModel.FINANCE_WEB_USERS" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="VendorPortalDataModel.WEBPORTAL" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+      <Diagram DiagramId="604bca33157d4b25a1ebcfee7ff23e31" Name="Diagram1">
+        <EntityTypeShape EntityType="DatabaseModel.CONTACT" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DatabaseModel.FINANCE_WEB_USERS" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DatabaseModel.WEBPORTAL" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="VendorPortalDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CONTACTS">
           <Key>
             <PropertyRef Name="Code" />
@@ -18,9 +18,9 @@
             <PropertyRef Name="VENDORNO" />
           </Key>
           <Property Name="VENDORNO" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="PASSWORD" Type="varchar" MaxLength="50" />
-          <Property Name="EMAILADDR" Type="varchar" MaxLength="100" />
-          <Property Name="ADMINUSER" Type="bit" />
+          <Property Name="PASSWORD" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EMAILADDR" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ADMINUSER" Type="bit" Nullable="false" />
           <Property Name="OUTDATE" Type="datetime" />
         </EntityType>
         <EntityType Name="WEBPORTAL">
@@ -42,7 +42,7 @@
           <Property Name="DUE_DATE" Type="datetime" />
           <Property Name="DOCUMENT_FILE_NAME" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="VendorPortalDataModelStoreContainer">
+        <EntityContainer Name="DatabaseModelStoreContainer">
           <EntitySet Name="CONTACTS" EntityType="Self.CONTACTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FINANCE_WEB_USERS" EntityType="Self.FINANCE_WEB_USERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WEBPORTAL" EntityType="Self.WEBPORTAL" Schema="dbo" store:Type="Tables" />
@@ -51,7 +51,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="VendorPortalDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="CONTACT">
           <Key>
             <PropertyRef Name="Code" />
@@ -65,9 +65,9 @@
             <PropertyRef Name="VENDORNO" />
           </Key>
           <Property Name="VENDORNO" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="EMAILADDR" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ADMINUSER" Type="Boolean" />
+          <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EMAILADDR" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ADMINUSER" Type="Boolean" Nullable="false" />
           <Property Name="OUTDATE" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="WEBPORTAL">
@@ -99,9 +99,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="VendorPortalDataModelStoreContainer" CdmEntityContainer="VendorPortalDatabaseEntities">
+        <EntityContainerMapping StorageEntityContainer="DatabaseModelStoreContainer" CdmEntityContainer="VendorPortalDatabaseEntities">
           <EntitySetMapping Name="CONTACTS">
-            <EntityTypeMapping TypeName="VendorPortalDataModel.CONTACT">
+            <EntityTypeMapping TypeName="DatabaseModel.CONTACT">
               <MappingFragment StoreEntitySet="CONTACTS">
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Area" ColumnName="Area" />
@@ -110,7 +110,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="FINANCE_WEB_USERS">
-            <EntityTypeMapping TypeName="VendorPortalDataModel.FINANCE_WEB_USERS">
+            <EntityTypeMapping TypeName="DatabaseModel.FINANCE_WEB_USERS">
               <MappingFragment StoreEntitySet="FINANCE_WEB_USERS">
                 <ScalarProperty Name="VENDORNO" ColumnName="VENDORNO" />
                 <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
@@ -121,7 +121,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="WEBPORTALs">
-            <EntityTypeMapping TypeName="VendorPortalDataModel.WEBPORTAL">
+            <EntityTypeMapping TypeName="DatabaseModel.WEBPORTAL">
               <MappingFragment StoreEntitySet="WEBPORTAL">
                 <ScalarProperty Name="ABN" ColumnName="ABN" />
                 <ScalarProperty Name="SUPPLIER_DESCRIPTION" ColumnName="SUPPLIER_DESCRIPTION" />
